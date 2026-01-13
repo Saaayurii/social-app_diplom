@@ -7,6 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { Poppins } from 'next/font/google';
 import { cn } from '@/lib/cn';
 import { Providers } from '@/components/Providers';
+import { Footer } from '@/components/Footer';
 import { auth } from '@/auth';
 import React from 'react';
 
@@ -27,8 +28,11 @@ export default async function Layout({ children }: { children: React.ReactNode }
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
       </head>
-      <body className={cn('bg-background text-foreground', poppins.className)}>
-        <Providers session={session}>{children}</Providers>
+      <body className={cn('flex min-h-screen flex-col bg-background text-foreground', poppins.className)}>
+        <Providers session={session}>
+          <div className="flex-1">{children}</div>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

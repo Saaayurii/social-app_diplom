@@ -131,9 +131,8 @@ export function NewConversationDialog({
           <>
             <Textarea
               value={content}
-              onChange={(e) => setContent(e.target.value)}
+              onChange={(v) => setContent(v)}
               placeholder="Введите сообщение..."
-              rows={4}
             />
             <Button
               onPress={handleCreate}
