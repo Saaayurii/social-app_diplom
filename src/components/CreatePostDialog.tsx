@@ -66,8 +66,8 @@ export function CreatePostDialog({
 
   const confirmExit = useCallback(() => {
     confirm({
-      title: 'Unsaved Changes',
-      message: 'Do you really wish to exit?',
+      title: 'Несохранённые изменения',
+      message: 'Вы действительно хотите выйти?',
       onConfirm: () => setTimeout(() => exit(), 300),
     });
   }, [confirm, exit]);
@@ -119,7 +119,7 @@ export function CreatePostDialog({
   }, []);
 
   return (
-    <GenericDialog title={`${capitalize(mode)} Post`} handleClose={handleClose}>
+    <GenericDialog title={mode === 'create' ? 'Создать публикацию' : 'Редактировать публикацию'} handleClose={handleClose}>
       <div className="mb-[18px] flex flex-row gap-3 px-4">
         <div className="h-11 w-11">
           <ProfilePhotoOwn />
@@ -128,7 +128,7 @@ export function CreatePostDialog({
           <TextAreaWithMentionsAndHashTags
             content={content}
             setContent={setContent}
-            placeholder="What's on your mind?"
+            placeholder="О чём вы думаете?"
           />
         </div>
         <div>
@@ -137,7 +137,7 @@ export function CreatePostDialog({
             size="small"
             isDisabled={content === '' && visualMedia.length === 0}
             loading={createPostMutation.isPending || updatePostMutation.isPending}>
-            Post
+            Опубликовать
           </Button>
         </div>
       </div>

@@ -10,7 +10,7 @@ export function useErrorNotifier() {
 
     showToast({
       type: 'error',
-      title: title || 'Error',
+      title: title || 'Ошибка',
       message: errorMessage,
     });
   };

@@ -39,8 +39,8 @@ export function useSessionUserDataMutation() {
       });
       showToast({
         type: 'success',
-        title: 'Success',
-        message: 'Your profile information has been updated.',
+        title: 'Успешно',
+        message: 'Данные профиля обновлены.',
       });
     },
   });

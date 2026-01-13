@@ -29,8 +29,8 @@ export function useCreateCommentMutations() {
         return [...oldComments, createdComment];
       });
       showToast({
-        title: 'Success',
-        message: 'Your comment has been created.',
+        title: 'Успешно',
+        message: 'Ваш комментарий добавлен.',
         type: 'success',
       });
     },
@@ -60,8 +60,8 @@ export function useCreateCommentMutations() {
         return [...oldReplies, createdReply];
       });
       showToast({
-        title: 'Success',
-        message: 'Your reply has been created.',
+        title: 'Успешно',
+        message: 'Ваш ответ добавлен.',
         type: 'success',
       });
     },

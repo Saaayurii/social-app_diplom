@@ -54,8 +54,8 @@ export const Comment = memo(
     );
     const handleCreateReply = useCallback(() => {
       prompt({
-        title: 'Reply',
-        message: `You are replying to ${author.name}'s comment.`,
+        title: 'Ответить',
+        message: `Вы отвечаете на комментарий пользователя ${author.name}.`,
         promptType: 'textarea',
         onSubmit: (value) => {
           createReplyMutation.mutate(
@@ -121,11 +121,11 @@ export const Comment = memo(
             {isOwnComment && (
               <DropdownMenuButton
                 key={`comments-${commentId}-options`}
-                label="Comment options"
+                label="Опции комментария"
                 onAction={onDropdownAction}>
                 <Section>
-                  <Item key="edit">Edit comment</Item>
-                  <Item key="delete">Delete comment</Item>
+                  <Item key="edit">Редактировать</Item>
+                  <Item key="delete">Удалить</Item>
                 </Section>
               </DropdownMenuButton>
             )}
@@ -136,7 +136,7 @@ export const Comment = memo(
             <ButtonNaked
               onPress={toggleReplies}
               className="my-1 cursor-pointer text-sm font-semibold text-muted-foreground hover:text-muted-foreground/70">
-              {!repliesShown ? `Show ${numberOfReplies} replies...` : 'Hide replies'}
+              {!repliesShown ? `Показать ответы (${numberOfReplies})...` : 'Скрыть ответы'}
             </ButtonNaked>
           )}
         </div>

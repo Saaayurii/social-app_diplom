@@ -32,7 +32,7 @@ export function CommentCreate({ postId }: { postId: number }) {
           <TextAreaWithMentionsAndHashTags
             content={content}
             setContent={setContent}
-            placeholder="Write your comment here..."
+            placeholder="Напишите комментарий..."
             shouldFocusOnMount={false}
           />
         </div>

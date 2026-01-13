@@ -71,9 +71,9 @@ export const Post = memo(
       [],
     );
 
-    if (isPending) return <p>Loading...</p>;
-    if (isError) return <p>Error loading post.</p>;
-    if (!data) return <p>This post no longer exists.</p>;
+    if (isPending) return <p>Загрузка...</p>;
+    if (isError) return <p>Ошибка загрузки публикации.</p>;
+    if (!data) return <p>Эта публикация больше не существует.</p>;
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const { content, createdAt, user: author, visualMedia, isLiked, _count } = data;

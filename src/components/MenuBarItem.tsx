@@ -27,8 +27,8 @@ export function MenuBarItem({
   const onItemClick = useCallback(() => {
     if (route === '/api/auth/signout') {
       confirm({
-        title: 'Confirm Logout',
-        message: 'Do you really wish to logout?',
+        title: 'Подтверждение выхода',
+        message: 'Вы действительно хотите выйти?',
         onConfirm: () => signOut({ callbackUrl: '/' }),
       });
     } else {

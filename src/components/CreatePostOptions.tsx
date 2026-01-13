@@ -28,10 +28,10 @@ export const CreatePostOptions = forwardRef<
 
   return (
     <div className="flex flex-row justify-center gap-6 px-4 pb-5 sm:justify-start">
-      <ButtonNaked aria-label="Upload an image or video" className="flex gap-4" onPress={onUploadImageOrVideoPress}>
+      <ButtonNaked aria-label="Загрузить изображение или видео" className="flex gap-4" onPress={onUploadImageOrVideoPress}>
         <SvgImage className="h-6 w-6 text-muted-foreground" />
         <p className="text-base font-semibold text-muted-foreground group-hover:text-muted-foreground/80">
-          Image / Video
+          Фото / Видео
         </p>
       </ButtonNaked>
       <input

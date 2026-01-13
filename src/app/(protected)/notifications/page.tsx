@@ -2,7 +2,7 @@ import { getServerUser } from '@/lib/getServerUser';
 import { Notifications } from './Notifications';
 
 export const metadata = {
-  title: 'Munia | Notifications',
+  title: 'ДонГУ Сеть | Уведомления',
 };
 
 export default async function Page() {

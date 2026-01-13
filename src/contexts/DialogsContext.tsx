@@ -93,7 +93,7 @@ export function DialogsContextProvider({ children }: { children: React.ReactNode
     }
     if (dialog.type === 'prompt') {
       if (promptValue === '') {
-        setInputError('This cannot be empty.');
+        setInputError('Это поле не может быть пустым.');
         return;
       }
       dialog?.onSubmit?.(promptValue);
@@ -102,9 +102,9 @@ export function DialogsContextProvider({ children }: { children: React.ReactNode
   }, [dialog, hide, promptValue]);
 
   const affirmativeTexts = {
-    alert: 'Okay',
-    confirm: 'Confirm',
-    prompt: 'Submit',
+    alert: 'Ок',
+    confirm: 'Подтвердить',
+    prompt: 'Отправить',
   };
 
   // This prevents unncessesary rerenders of the `DialogsContext` consumers
@@ -133,7 +133,7 @@ export function DialogsContextProvider({ children }: { children: React.ReactNode
                       <TextInput
                         value={promptValue}
                         onChange={setPromptValue}
-                        placeholder={dialog.promptLabel || 'Input here'}
+                        placeholder={dialog.promptLabel || 'Введите текст'}
                         ref={inputRef}
                         errorMessage={inputError || undefined}
                       />
@@ -141,7 +141,7 @@ export function DialogsContextProvider({ children }: { children: React.ReactNode
                       <TextAreaWithMentionsAndHashTags
                         content={promptValue}
                         setContent={setPromptValue}
-                        placeholder={dialog.promptLabel || 'Input here'}
+                        placeholder={dialog.promptLabel || 'Введите текст'}
                         errorMessage={inputError || undefined}
                       />
                     )}
@@ -153,7 +153,7 @@ export function DialogsContextProvider({ children }: { children: React.ReactNode
               </Button>
               {dialog.type !== 'alert' && (
                 <Button onPress={hide} shape="pill" mode="ghost">
-                  Cancel
+                  Отмена
                 </Button>
               )}
             </AlertDialog>

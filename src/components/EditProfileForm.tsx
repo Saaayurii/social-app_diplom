@@ -72,7 +72,7 @@ export function EditProfileForm({ redirectTo }: { redirectTo?: string }) {
     reset(defaultValues);
   }, [reset, defaultValues]);
 
-  if (!userData) return <GenericLoading>Loading form</GenericLoading>;
+  if (!userData) return <GenericLoading>Загрузка формы</GenericLoading>;
   return (
     <div>
       <form onSubmit={handleSubmit(onValid, onInvalid)} className="flex flex-col gap-4">
@@ -82,7 +82,7 @@ export function EditProfileForm({ redirectTo }: { redirectTo?: string }) {
           render={({ field: { onChange, ref, value }, fieldState: { error } }) => (
             <div>
               <TextInput
-                label="Username *"
+                label="Имя пользователя *"
                 value={value}
                 onChange={(v) => onChange(v)}
                 errorMessage={error?.message}
@@ -119,7 +119,7 @@ export function EditProfileForm({ redirectTo }: { redirectTo?: string }) {
           render={({ field: { onChange, ref, value }, fieldState: { error } }) => (
             <div>
               <TextInput
-                label="Name *"
+                label="Имя *"
                 value={value}
                 onChange={(v) => onChange(v)}
                 errorMessage={error?.message}
@@ -136,7 +136,7 @@ export function EditProfileForm({ redirectTo }: { redirectTo?: string }) {
           render={({ field: { onChange, ref, value }, fieldState: { error } }) => (
             <div>
               <TextInput
-                label="Phone Number"
+                label="Телефон"
                 value={value || ''}
                 onChange={(v) => onChange(v || null)}
                 errorMessage={error?.message}
@@ -153,7 +153,7 @@ export function EditProfileForm({ redirectTo }: { redirectTo?: string }) {
           render={({ field: { onChange, ref, value }, fieldState: { error } }) => (
             <div>
               <Textarea
-                label="Bio"
+                label="О себе"
                 value={value || ''}
                 onChange={(v) => onChange(v || null)}
                 errorMessage={error?.message}
@@ -169,7 +169,7 @@ export function EditProfileForm({ redirectTo }: { redirectTo?: string }) {
           render={({ field: { onChange, ref, value }, fieldState: { error } }) => (
             <div>
               <TextInput
-                label="Website"
+                label="Сайт"
                 value={value || ''}
                 onChange={(v) => onChange(v || null)}
                 errorMessage={error?.message}
@@ -186,7 +186,7 @@ export function EditProfileForm({ redirectTo }: { redirectTo?: string }) {
           render={({ field: { onChange, ref, value }, fieldState: { error } }) => (
             <div>
               <TextInput
-                label="Address"
+                label="Адрес"
                 value={value || ''}
                 onChange={(v) => onChange(v || null)}
                 errorMessage={error?.message}
@@ -203,16 +203,16 @@ export function EditProfileForm({ redirectTo }: { redirectTo?: string }) {
           render={({ field: { onChange, ref, value }, fieldState: { error } }) => (
             <div>
               <Select
-                label="Gender"
+                label="Пол"
                 name="gender"
                 selectedKey={value || null}
                 onSelectionChange={(key) => onChange(key || null)}
                 errorMessage={error?.message}
                 ref={ref}
                 Icon={Other}>
-                <Item key="MALE">Male</Item>
-                <Item key="FEMALE">Female</Item>
-                <Item key="NONBINARY">Nonbinary</Item>
+                <Item key="MALE">Мужской</Item>
+                <Item key="FEMALE">Женский</Item>
+                <Item key="NONBINARY">Другой</Item>
               </Select>
             </div>
           )}
@@ -224,17 +224,17 @@ export function EditProfileForm({ redirectTo }: { redirectTo?: string }) {
           render={({ field: { onChange, ref, value }, fieldState: { error } }) => (
             <div>
               <Select
-                label="Relationship Status"
+                label="Семейное положение"
                 name="relationshipStatus"
                 selectedKey={value || null}
                 onSelectionChange={(key) => onChange(key || null)}
                 errorMessage={error?.message}
                 Icon={Heart}
                 ref={ref}>
-                <Item key="SINGLE">Single</Item>
-                <Item key="IN_A_RELATIONSHIP">In a relationship</Item>
-                <Item key="ENGAGED">Enganged</Item>
-                <Item key="MARRIED">Married</Item>
+                <Item key="SINGLE">Не в отношениях</Item>
+                <Item key="IN_A_RELATIONSHIP">В отношениях</Item>
+                <Item key="ENGAGED">Помолвлен(а)</Item>
+                <Item key="MARRIED">В браке</Item>
               </Select>
             </div>
           )}
@@ -247,7 +247,7 @@ export function EditProfileForm({ redirectTo }: { redirectTo?: string }) {
           render={({ field: { onChange, ref }, fieldState: { error } }) => (
             <div>
               <DatePicker
-                label="Birth Date"
+                label="Дата рождения"
                 defaultValue={
                   userData.birthDate &&
                   parseDate(
@@ -272,10 +272,10 @@ export function EditProfileForm({ redirectTo }: { redirectTo?: string }) {
             type="button"
             loading={updateSessionUserDataMutation.isPending === true}
             onPress={resetForm}>
-            Reset
+            Сбросить
           </Button>
           <Button type="submit" loading={updateSessionUserDataMutation.isPending === true}>
-            Submit
+            Сохранить
           </Button>
         </div>
       </form>

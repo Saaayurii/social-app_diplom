@@ -21,8 +21,8 @@ export function PostOptions({
 
   const handleDeleteClick = useCallback(() => {
     confirm({
-      title: 'Delete Post',
-      message: 'Do you really wish to delete this post?',
+      title: 'Удалить публикацию',
+      message: 'Вы действительно хотите удалить эту публикацию?',
       onConfirm: () => {
         // Wait for the dialog to close before deleting the comment to pass the focus to
         // the next element first, preventing the focus from resetting to the top
@@ -51,10 +51,10 @@ export function PostOptions({
   );
 
   return (
-    <DropdownMenuButton key={`posts-${postId}-options`} label="Post options" onAction={handleOptionClick}>
+    <DropdownMenuButton key={`posts-${postId}-options`} label="Опции публикации" onAction={handleOptionClick}>
       <Section>
-        <Item key="edit">Edit Post</Item>
-        <Item key="delete">Delete Post</Item>
+        <Item key="edit">Редактировать</Item>
+        <Item key="delete">Удалить</Item>
       </Section>
     </DropdownMenuButton>
   );

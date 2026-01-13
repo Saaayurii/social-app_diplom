@@ -14,7 +14,7 @@ const follow = async ({ userId, targetUserId }: { userId: string; targetUserId: 
 
   if (!res.ok) {
     if (res.status === 409) return;
-    throw new Error('Failed to follow user.');
+    throw new Error('Не удалось подписаться на пользователя.');
   }
 };
 
@@ -25,7 +25,7 @@ const unFollow = async ({ userId, targetUserId }: { userId: string; targetUserId
 
   if (!res.ok) {
     if (res.status === 409) return;
-    throw new Error('Failed to unfollow user.');
+    throw new Error('Не удалось отписаться от пользователя.');
   }
 };
 
@@ -64,7 +64,7 @@ export function useFollowsMutations({ targetUserId }: { targetUserId: string }) 
     onError: (err: Error, variables, context) => {
       qc.setQueryData(queryKey, context?.previousTargetUser);
       showToast({
-        title: 'Something Went Wrong',
+        title: 'Что-то пошло не так',
         message: err.message,
         type: 'error',
       });
@@ -99,7 +99,7 @@ export function useFollowsMutations({ targetUserId }: { targetUserId: string }) 
     onError: (err: Error, variables, context) => {
       qc.setQueryData(queryKey, context?.previousTargetUser);
       showToast({
-        title: 'Something Went Wrong',
+        title: 'Что-то пошло не так',
         message: err.message,
         type: 'error',
       });

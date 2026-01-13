@@ -7,7 +7,7 @@ export function GenericLoading({ children }: { children?: React.ReactNode }) {
       <div>
         <SvgLoading className="h-12 w-12 animate-spin stroke-foreground" />
       </div>
-      <p className="text-lg">{children || 'Loading page'}</p>
+      <p className="text-lg">{children || 'Загрузка страницы'}</p>
     </div>
   );
 }

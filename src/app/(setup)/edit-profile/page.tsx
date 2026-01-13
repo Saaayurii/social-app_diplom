@@ -2,7 +2,7 @@ import { EditProfileForm } from '@/components/EditProfileForm';
 import { ResponsiveContainer } from '@/components/ui/ResponsiveContainer';
 
 export const metadata = {
-  title: 'Munia | Edit Profile',
+  title: 'ДонГУ Сеть | Редактирование профиля',
 };
 
 export default function Page() {

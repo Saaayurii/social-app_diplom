@@ -22,7 +22,7 @@ export function CreatePostModalLauncher() {
           <ProfilePhotoOwn />
         </div>
         <ButtonNaked onPress={launcCreatePostFinderClosed} className="flex flex-grow flex-col justify-center">
-          <p className="text-muted-foreground/70">What&apos;s on your mind?</p>
+          <p className="text-muted-foreground/70">О чём вы думаете?</p>
         </ButtonNaked>
       </div>
       <div className="flex flex-row gap-4">
@@ -31,7 +31,7 @@ export function CreatePostModalLauncher() {
           className="group flex cursor-pointer flex-row items-center gap-4">
           <SvgImage className="h-6 w-6 text-muted-foreground" />
           <p className="text-base font-semibold text-muted-foreground group-hover:text-muted-foreground/80">
-            Image / Video
+            Фото / Видео
           </p>
         </ButtonNaked>
         {/* <ButtonNaked className="group flex cursor-pointer flex-row items-center gap-4">

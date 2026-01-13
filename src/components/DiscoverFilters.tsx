@@ -58,22 +58,23 @@ export function DiscoverFilters() {
     <div className="mb-6 flex flex-col gap-4 sm:flex-row">
       <div className="flex-1">
         <Select
-          label="Filter by Gender"
+          label="Фильтр по полу"
           selectedKey={toUpper(snakeCase(filters.gender)) || null}
           onSelectionChange={onSelectGender}>
-          {genderFilters.map((gender) => (
-            <Item key={gender}>{startCase(lowerCase(gender))}</Item>
-          ))}
+          <Item key="MALE">Мужской</Item>
+          <Item key="FEMALE">Женский</Item>
+          <Item key="NONBINARY">Другой</Item>
         </Select>
       </div>
       <div className="flex-1">
         <Select
-          label="Filter by Status"
+          label="Фильтр по статусу"
           selectedKey={toUpper(snakeCase(filters.relationshipStatus)) || null}
           onSelectionChange={onSelectRelationshipStatus}>
-          {relationshipStatusFilters.map((relationship) => (
-            <Item key={relationship}>{startCase(lowerCase(relationship))}</Item>
-          ))}
+          <Item key="SINGLE">Не в отношениях</Item>
+          <Item key="IN_A_RELATIONSHIP">В отношениях</Item>
+          <Item key="ENGAGED">Помолвлен(а)</Item>
+          <Item key="MARRIED">В браке</Item>
         </Select>
       </div>
     </div>

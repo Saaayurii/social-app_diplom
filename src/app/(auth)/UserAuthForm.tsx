@@ -48,13 +48,13 @@ export function UserAuthForm({ mode }: { mode: 'login' | 'register' }) {
         email: false,
       }));
       if (!signInResult?.ok) {
-        showToast({ type: 'error', title: 'Something went wrong' });
+        showToast({ type: 'error', title: 'Что-то пошло не так' });
         return;
       }
       showToast({
         type: 'success',
-        title: 'Email Sent',
-        message: 'Please check your email to sign in.',
+        title: 'Письмо отправлено',
+        message: 'Проверьте вашу почту для входа.',
       });
     } else {
       setInputError(validateEmail.error.issues[0].message);
@@ -79,7 +79,7 @@ export function UserAuthForm({ mode }: { mode: 'login' | 'register' }) {
         [provider]: false,
       }));
       if (signInResult?.error) {
-        showToast({ type: 'error', title: 'Something went wrong' });
+        showToast({ type: 'error', title: 'Что-то пошло не так' });
       }
     },
     [callbackUrl, showToast],
@@ -91,7 +91,7 @@ export function UserAuthForm({ mode }: { mode: 'login' | 'register' }) {
         <TextInput
           value={email}
           onChange={onEmailChange}
-          label="Email"
+          label="Эл. почта"
           errorMessage={inputError || undefined}
           Icon={AtSign}
         />
@@ -104,7 +104,7 @@ export function UserAuthForm({ mode }: { mode: 'login' | 'register' }) {
           Icon={LogInSquare}
           loading={loading.email}
           isDisabled={areButtonsDisabled}>
-          {mode === 'login' ? 'Login' : 'Sign up'} with Email
+          {mode === 'login' ? 'Войти' : 'Зарегистрироваться'} через Email
         </Button>
       </div>
       <div className="relative mb-4">
@@ -112,7 +112,7 @@ export function UserAuthForm({ mode }: { mode: 'login' | 'register' }) {
           <span className="w-full border-t border-muted" />
         </div>
         <div className="relative flex justify-center">
-          <span className="bg-background px-3 text-muted-foreground">OR CONTINUE WITH</span>
+          <span className="bg-background px-3 text-muted-foreground">ИЛИ ПРОДОЛЖИТЬ ЧЕРЕЗ</span>
         </div>
       </div>
       <div className="mb-4 flex flex-col gap-3">

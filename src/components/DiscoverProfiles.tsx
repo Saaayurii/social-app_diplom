@@ -96,7 +96,7 @@ export function DiscoverProfiles({ followersOf, followingOf }: { followersOf?: s
   return (
     <>
       {isPending ? (
-        <GenericLoading>Loading profiles</GenericLoading>
+        <GenericLoading>Загрузка профилей</GenericLoading>
       ) : isError ? (
         <SomethingWentWrong />
       ) : (

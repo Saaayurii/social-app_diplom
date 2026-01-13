@@ -1,5 +1,4 @@
 import { ButtonLink } from '@/components/ui/ButtonLink';
-import { ButtonAnchor } from '@/components/ui/ButtonAnchor';
 import React from 'react';
 
 function TechStackCard({ header, children }: { header: string; children: React.ReactNode }) {
@@ -16,19 +15,17 @@ export default function Page() {
   return (
     <main>
       <div className="mt-28 flex flex-col items-center sm:mt-36">
-        <a href="https://twitter.com/norciodotdev">
-          <p className="inline-block rounded-lg bg-card px-3 py-2 text-card-foreground">Follow me on X</p>
-        </a>
+        <p className="inline-block rounded-lg bg-card px-3 py-2 text-card-foreground">Донецкий государственный университет</p>
         <h1 className="mt-4 px-5 text-center text-2xl sm:text-5xl">
-          A responsive and accessible full stack social media web app.
+          Социальная сеть для студентов и преподавателей ДонГУ
         </h1>
         <div className="mt-6 flex justify-center gap-3">
           <ButtonLink href="/login" size="medium">
-            Get Started
+            Войти
           </ButtonLink>
-          <ButtonAnchor href="https://github.com/leandronorcio/munia" size="medium" mode="secondary">
-            Github
-          </ButtonAnchor>
+          <ButtonLink href="/register" size="medium" mode="secondary">
+            Регистрация
+          </ButtonLink>
         </div>
       </div>
 

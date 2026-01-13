@@ -4,7 +4,7 @@ import { ThemeSwitch } from '@/components/ui/ThemeSwitch';
 import { getServerUser } from '@/lib/getServerUser';
 
 export const metadata = {
-  title: 'Munia | Feed',
+  title: 'ДонГУ Сеть | Лента',
 };
 
 export default async function Page() {

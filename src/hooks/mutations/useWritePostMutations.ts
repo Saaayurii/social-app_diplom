@@ -78,12 +78,12 @@ export function useWritePostMutations({
           pageParams: newPageParams,
         };
       });
-      showToast({ title: 'Successfully Posted', type: 'success' });
+      showToast({ title: 'Публикация создана', type: 'success' });
       revokeVisualMediaObjectUrls(visualMedia);
       exitCreatePostModal();
     },
     onError: (err) => {
-      notifyError(err, 'Error Creating Post');
+      notifyError(err, 'Ошибка');
     },
   });
 
@@ -123,12 +123,12 @@ export function useWritePostMutations({
           pageParams: oldData.pageParams,
         };
       });
-      showToast({ title: 'Successfully Edited', type: 'success' });
+      showToast({ title: 'Публикация обновлена', type: 'success' });
       revokeVisualMediaObjectUrls(visualMedia);
       exitCreatePostModal();
     },
     onError: (err) => {
-      notifyError(err, 'Error Creating Post');
+      notifyError(err, 'Ошибка');
     },
   });
 

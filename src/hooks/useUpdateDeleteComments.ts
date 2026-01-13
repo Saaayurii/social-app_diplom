@@ -9,7 +9,7 @@ export function useUpdateDeleteComments({ queryKey }: { queryKey: QueryKey }) {
 
   const handleEdit = ({ commentId, content }: { commentId: number; content: string }) => {
     prompt({
-      title: 'Edit Comment',
+      title: 'Редактировать комментарий',
       initialPromptValue: content,
       promptType: 'textarea',
       onSubmit: async (value) => {
@@ -20,8 +20,8 @@ export function useUpdateDeleteComments({ queryKey }: { queryKey: QueryKey }) {
 
   const handleDelete = ({ commentId }: { commentId: number }) => {
     confirm({
-      title: 'Confirm Delete',
-      message: 'Do you really wish to delete this comment?',
+      title: 'Подтверждение удаления',
+      message: 'Вы действительно хотите удалить этот комментарий?',
       onConfirm: () => {
         // Wait for the dialog to close before deleting the comment to pass the focus to
         // the next element first, preventing the focus from resetting to the top

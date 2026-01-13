@@ -27,17 +27,10 @@ export function Activity({
   const isNotification = targetUser.id === userId;
   const userToDisplay = isActivity ? targetUser : sourceUser;
 
-  const sourceProperNoun = isActivity ? 'You' : sourceUser.name;
-  const sourcePossessiveNoun = isActivity
-    ? 'your'
-    : sourceUser.gender === 'MALE'
-    ? 'his'
-    : sourceUser.gender === 'FEMALE'
-    ? 'her'
-    : 'their';
+  const sourceProperNoun = isActivity ? 'Вы' : sourceUser.name;
 
-  const targetProperNoun = isNotification ? 'you' : targetUser.name;
-  const targetPossessiveNoun = isNotification ? 'your' : `${targetUser.name}'s`;
+  const targetProperNoun = isNotification ? 'вас' : targetUser.name;
+  const targetPossessiveNoun = isNotification ? 'вашу' : `пользователя ${targetUser.name}`;
 
   const isRead = isActivity || isNotificationRead;
   const navigate = (href: string) => () => {
@@ -56,7 +49,7 @@ export function Activity({
         date={new Date(createdAt)}
         isRead={isRead}
         onClick={navigate(`/${isActivity ? targetUser.username : sourceUser.username}`)}>
-        <SemiBold>{sourceProperNoun}</SemiBold> started following <SemiBold>{targetProperNoun}</SemiBold>!
+        <SemiBold>{sourceProperNoun}</SemiBold> {isActivity ? 'подписались на' : 'подписался(ась) на'} <SemiBold>{targetProperNoun}</SemiBold>!
       </ActivityCard>
     );
   }
@@ -69,7 +62,7 @@ export function Activity({
         date={new Date(createdAt)}
         isRead={isRead}
         onClick={navigate(`/posts/${targetId}`)}>
-        <SemiBold>{sourceProperNoun}</SemiBold> liked <SemiBold>{targetPossessiveNoun}</SemiBold> post: &quot;{content}
+        <SemiBold>{sourceProperNoun}</SemiBold> {isActivity ? 'оценили' : 'оценил(а)'} публикацию {targetPossessiveNoun}: &quot;{content}
         &quot;
       </ActivityCard>
     );
@@ -82,8 +75,7 @@ export function Activity({
         date={new Date(createdAt)}
         isRead={isRead}
         onClick={navigate(`/posts/${sourceId}`)}>
-        <SemiBold>{sourceProperNoun}</SemiBold> mentioned <SemiBold>{targetProperNoun}</SemiBold> in{' '}
-        {sourcePossessiveNoun} post: &quot;{content}&quot;
+        <SemiBold>{sourceProperNoun}</SemiBold> {isActivity ? 'упомянули' : 'упомянул(а)'} <SemiBold>{targetProperNoun}</SemiBold> в публикации: &quot;{content}&quot;
       </ActivityCard>
     );
   }
@@ -96,7 +88,7 @@ export function Activity({
         date={new Date(createdAt)}
         isRead={isRead}
         onClick={navigate(`/comments/${sourceId}`)}>
-        <SemiBold>{sourceProperNoun}</SemiBold> commented on <SemiBold>{targetPossessiveNoun}</SemiBold> post: &quot;
+        <SemiBold>{sourceProperNoun}</SemiBold> {isActivity ? 'прокомментировали' : 'прокомментировал(а)'} публикацию {targetPossessiveNoun}: &quot;
         {content}&quot;
       </ActivityCard>
     );
@@ -109,7 +101,7 @@ export function Activity({
         date={new Date(createdAt)}
         isRead={isRead}
         onClick={navigate(`/comments/${targetId}`)}>
-        <SemiBold>{sourceProperNoun}</SemiBold> liked <SemiBold>{targetPossessiveNoun}</SemiBold> comment: &quot;
+        <SemiBold>{sourceProperNoun}</SemiBold> {isActivity ? 'оценили' : 'оценил(а)'} комментарий {targetPossessiveNoun}: &quot;
         {content}
         &quot;
       </ActivityCard>
@@ -123,8 +115,7 @@ export function Activity({
         date={new Date(createdAt)}
         isRead={isRead}
         onClick={navigate(`/comments/${sourceId}`)}>
-        <SemiBold>{sourceProperNoun}</SemiBold> mentioned <SemiBold>{targetProperNoun}</SemiBold> in{' '}
-        {sourcePossessiveNoun} comment: &quot;{content}&quot;
+        <SemiBold>{sourceProperNoun}</SemiBold> {isActivity ? 'упомянули' : 'упомянул(а)'} <SemiBold>{targetProperNoun}</SemiBold> в комментарии: &quot;{content}&quot;
       </ActivityCard>
     );
   }
@@ -137,7 +128,7 @@ export function Activity({
         date={new Date(createdAt)}
         isRead={isRead}
         onClick={navigate(`/comments/${sourceId}`)}>
-        <SemiBold>{sourceProperNoun}</SemiBold> replied to <SemiBold>{targetPossessiveNoun}</SemiBold> comment: &quot;
+        <SemiBold>{sourceProperNoun}</SemiBold> {isActivity ? 'ответили' : 'ответил(а)'} на комментарий {targetPossessiveNoun}: &quot;
         {content}
         &quot;
       </ActivityCard>
@@ -151,7 +142,7 @@ export function Activity({
         date={new Date(createdAt)}
         isRead={isRead}
         onClick={navigate(`/comments/${targetId}`)}>
-        <SemiBold>{sourceProperNoun}</SemiBold> liked <SemiBold>{targetPossessiveNoun}</SemiBold> reply: &quot;{content}
+        <SemiBold>{sourceProperNoun}</SemiBold> {isActivity ? 'оценили' : 'оценил(а)'} ответ {targetPossessiveNoun}: &quot;{content}
         &quot;
       </ActivityCard>
     );
@@ -164,8 +155,7 @@ export function Activity({
         date={new Date(createdAt)}
         isRead={isRead}
         onClick={navigate(`/comments/${sourceId}`)}>
-        <SemiBold>{sourceProperNoun}</SemiBold> mentioned <SemiBold>{targetProperNoun}</SemiBold> in{' '}
-        {sourcePossessiveNoun} reply: &quot;{content}&quot;
+        <SemiBold>{sourceProperNoun}</SemiBold> {isActivity ? 'упомянули' : 'упомянул(а)'} <SemiBold>{targetProperNoun}</SemiBold> в ответе: &quot;{content}&quot;
       </ActivityCard>
     );
   }

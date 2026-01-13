@@ -20,7 +20,7 @@ export function useDeletePostMutation() {
       });
 
       if (!res.ok) {
-        throw Error('Failed to delete post.');
+        throw Error('Не удалось удалить публикацию.');
       }
 
       return (await res.json()) as { id: number };

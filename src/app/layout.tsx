@@ -16,8 +16,8 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  title: 'Munia',
-  description: 'A social media web app, built with Next.js 13.',
+  title: 'ДонГУ Сеть',
+  description: 'Социальная сеть Донецкого государственного университета',
 };
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
