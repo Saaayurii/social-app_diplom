@@ -37,39 +37,6 @@ services:
       # Database
       DATABASE_URL: postgresql://${POSTGRES_USER:-socialapp}:${POSTGRES_PASSWORD:-socialapp123}@postgres:5432/${POSTGRES_DB:-socialapp}?schema=public
 
-      # NextAuth
-      AUTH_URL: ${AUTH_URL:-http://localhost:3002}
-      AUTH_SECRET: ${AUTH_SECRET}
-
-      # Resend API
-      RESEND_API_KEY: ${RESEND_API_KEY}
-      RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL:-onboarding@resend.dev}
-
-      # OAuth Providers
-      AUTH_GITHUB_ID: ${AUTH_GITHUB_ID}
-      AUTH_GITHUB_SECRET: ${AUTH_GITHUB_SECRET}
-      AUTH_GOOGLE_ID: ${AUTH_GOOGLE_ID}
-      AUTH_GOOGLE_SECRET: ${AUTH_GOOGLE_SECRET}
-      AUTH_FACEBOOK_ID: ${AUTH_FACEBOOK_ID}
-      AUTH_FACEBOOK_SECRET: ${AUTH_FACEBOOK_SECRET}
-
-      # Storage Configuration (true = AWS, false = Local)
-      USE_AWS_STORAGE: ${USE_AWS_STORAGE:-false}
-
-      # AWS S3 (only if USE_AWS_STORAGE=true)
-      AWS_REGION: ${AWS_REGION:-us-east-1}
-      S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:-dummy}
-      S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:-dummy}
-      S3_BUCKET_NAME: ${S3_BUCKET_NAME:-dummy}
-
-      # AWS SES (only if USE_AWS_STORAGE=true)
-      SES_ACCESS_KEY_ID: ${SES_ACCESS_KEY_ID:-dummy}
-      SES_SECRET_ACCESS_KEY: ${SES_SECRET_ACCESS_KEY:-dummy}
-
-      # Local Storage Path (only if USE_AWS_STORAGE=false)
-      LOCAL_STORAGE_PATH: ${LOCAL_STORAGE_PATH:-/app/uploads}
-      PUBLIC_URL: ${PUBLIC_URL:-http://localhost:3002}
-
       # Application
       NODE_ENV: production
     volumes:
