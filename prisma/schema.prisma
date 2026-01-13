@@ -62,10 +62,12 @@ model User {
   postLikes          PostLike[]
   comments           Comment[]
   commentLikes       CommentLike[]
-  followers          Follow[]            @relation("following")
-  following          Follow[]            @relation("follower")
-  activities         Activity[]          @relation("activity")
-  notifications      Activity[]          @relation("notification")
+  followers                Follow[]                  @relation("following")
+  following                Follow[]                  @relation("follower")
+  activities               Activity[]                @relation("activity")
+  notifications            Activity[]                @relation("notification")
+  conversationParticipants ConversationParticipant[]
+  sentMessages             Message[]
 }
 
 model VerificationToken {
@@ -205,4 +207,35 @@ enum RelationshipStatus {
   IN_A_RELATIONSHIP
   ENGAGED
   MARRIED
+}
+
+// === Messaging System ===
+
+model Conversation {
+  id           Int                       @id @default(autoincrement())
+  createdAt    DateTime                  @default(now())
+  updatedAt    DateTime                  @updatedAt
+  participants ConversationParticipant[]
+  messages     Message[]
+}
+
+model ConversationParticipant {
+  id             Int          @id @default(autoincrement())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId Int
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
+  lastReadAt     DateTime     @default(now())
+
+  @@unique([conversationId, userId])
+}
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  content        String
+  createdAt      DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId Int
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  senderId       String
 }

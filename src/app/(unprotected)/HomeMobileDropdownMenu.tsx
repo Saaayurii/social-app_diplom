@@ -10,12 +10,12 @@ export function HomeMobileDropdownMenu() {
   const router = useRouter();
   const onAction = useCallback((key: Key) => router.push(key as string), [router]);
   return (
-    <DropdownMenuButton key="home-dropdown-menu" label="Home dropdown menu" onAction={onAction} Icon={HamburgerMenu}>
+    <DropdownMenuButton key="home-dropdown-menu" label="Меню" onAction={onAction} Icon={HamburgerMenu}>
       <Section>
-        <Item key="/terms">Terms</Item>
-        <Item key="/privacy-policy">Privacy Policy</Item>
-        <Item key="/login">Login</Item>
-        <Item key="/sign-up">Sign Up</Item>
+        <Item key="/terms">Условия</Item>
+        <Item key="/privacy-policy">Конфиденциальность</Item>
+        <Item key="/login">Войти</Item>
+        <Item key="/register">Регистрация</Item>
       </Section>
     </DropdownMenuButton>
   );

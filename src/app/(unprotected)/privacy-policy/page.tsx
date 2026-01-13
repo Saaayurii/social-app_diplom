@@ -1,3 +1,3 @@
 export default function Page() {
-  return <h1>Privacy Policy</h1>;
+  return <h1>Политика конфиденциальности</h1>;
 }

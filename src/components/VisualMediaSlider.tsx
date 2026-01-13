@@ -72,7 +72,7 @@ export default function VisualMediaSlider({
                 // eslint-disable-next-line jsx-a11y/media-has-caption
                 <video className="max-h-[75%]" autoPlay controls>
                   <source src={url} type="video/mp4" />
-                  Your browser does not support the video tag.
+                  Ваш браузер не поддерживает воспроизведение видео.
                 </video>
               )}
             </div>

@@ -71,11 +71,11 @@ export const CommentReply = memo(
             {isOwnReply && (
               <DropdownMenuButton
                 key={`replies-${commentId}-options`}
-                label="Reply options"
+                label="Опции ответа"
                 onAction={onDropdownAction}>
                 <Section>
-                  <Item key="edit">Edit reply</Item>
-                  <Item key="delete">Delete reply</Item>
+                  <Item key="edit">Редактировать</Item>
+                  <Item key="delete">Удалить</Item>
                 </Section>
               </DropdownMenuButton>
             )}

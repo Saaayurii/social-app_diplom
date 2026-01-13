@@ -23,7 +23,7 @@ export function ProfileActionButtons({ targetUserId }: { targetUserId: string })
   return (
     <div className="flex flex-row items-center gap-2 md:gap-4">
       <Button onPress={handleClick} mode={isFollowing ? 'secondary' : 'primary'} shape="pill" loading={isPending}>
-        {isFollowing ? 'Unfollow' : 'Follow'}
+        {isFollowing ? 'Отписаться' : 'Подписаться'}
       </Button>
       {/* <Button Icon={Mail} onPress={() => {}} mode="secondary" size="medium" /> */}
     </div>

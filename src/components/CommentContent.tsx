@@ -1,4 +1,5 @@
 import { formatDistanceToNowStrict } from 'date-fns';
+import { ru } from 'date-fns/locale';
 import { cn } from '@/lib/cn';
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
@@ -39,7 +40,7 @@ export function CommentContent({
         <p className="mb-1 text-foreground">
           <HighlightedMentionsAndHashTags text={content} shouldAddLinks />
         </p>
-        <p className="ml-auto text-sm text-muted-foreground">{formatDistanceToNowStrict(new Date(createdAt))} ago</p>
+        <p className="ml-auto text-sm text-muted-foreground">{formatDistanceToNowStrict(new Date(createdAt), { locale: ru })} назад</p>
       </div>
     </div>
   );

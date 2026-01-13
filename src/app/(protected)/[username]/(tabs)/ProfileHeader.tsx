@@ -32,7 +32,7 @@ export function ProfileHeader({
         <div className="absolute -bottom-20 right-2 md:right-0">
           {isOwnProfile ? (
             <ButtonLink shape="pill" mode="subtle" href="/edit-profile">
-              Edit Profile
+              Редактировать профиль
             </ButtonLink>
           ) : (
             <ProfileActionButtons targetUserId={profile.id} />
@@ -50,7 +50,7 @@ export function ProfileHeader({
             className="link"
             title={`${initialProfileData.name}&apos; followers`}>
             <span className="font-semibold">{profile.followerCount}</span>{' '}
-            <span className="font-medium text-muted-foreground">Followers</span>
+            <span className="font-medium text-muted-foreground">Подписчики</span>
           </Link>
           <Ellipse className="h-1 w-1 fill-foreground" />
           <Link
@@ -58,7 +58,7 @@ export function ProfileHeader({
             className="link"
             title={`${initialProfileData.name}&apos; followed users`}>
             <span className="font-semibold">{profile.followingCount}</span>{' '}
-            <span className="font-medium text-muted-foreground">Following</span>
+            <span className="font-medium text-muted-foreground">Подписки</span>
           </Link>
         </div>
         <Tabs isOwnProfile={isOwnProfile} />

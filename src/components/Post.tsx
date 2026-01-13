@@ -4,6 +4,7 @@ import { memo, useCallback, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
 import { cn } from '@/lib/cn';
 import formatDistanceStrict from 'date-fns/formatDistanceStrict';
+import { ru } from 'date-fns/locale';
 import SvgComment from '@/svg_components/Comment';
 import { AnimatePresence, motion } from 'framer-motion';
 import { GetPost, PostId } from '@/types/definitions';
@@ -86,7 +87,7 @@ export const Post = memo(
           <ProfileBlock
             name={author.name!}
             username={author.username!}
-            time={formatDistanceStrict(new Date(createdAt), new Date())}
+            time={formatDistanceStrict(new Date(createdAt), new Date(), { locale: ru })}
             photoUrl={author.profilePhoto!}
           />
           {isOwnPost && <PostOptions postId={postId} content={content} visualMedia={visualMedia} />}

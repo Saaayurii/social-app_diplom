@@ -172,3 +172,68 @@ export interface GetActivity extends FindActivityResult {
   content?: string | null;
 }
 export type GetActivities = GetActivity[];
+
+// === Messaging Types ===
+
+type UserSummaryForMessage = Pick<User, 'id' | 'username' | 'name' | 'profilePhoto'>;
+
+// Use this type when finding a Conversation in prisma.
+export interface FindConversationResult {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  participants: {
+    userId: string;
+    lastReadAt: Date;
+    user: UserSummaryForMessage;
+  }[];
+  messages: {
+    id: number;
+    content: string;
+    createdAt: Date;
+    senderId: string;
+  }[];
+  _count: {
+    messages: number;
+  };
+}
+
+/**
+ * The <FindConversationResult> shall be converted to <GetConversation>.
+ * <GetConversation> must be the response type of GET conversations route handlers.
+ */
+export interface GetConversation {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  otherParticipant: UserSummaryAfterSetUp;
+  lastMessage: {
+    content: string;
+    createdAt: Date;
+    isOwn: boolean;
+  } | null;
+  unreadCount: number;
+}
+
+// Use this type when finding a Message in prisma.
+export interface FindMessageResult {
+  id: number;
+  content: string;
+  createdAt: Date;
+  senderId: string;
+  conversationId: number;
+  sender: UserSummaryForMessage;
+}
+
+/**
+ * The <FindMessageResult> shall be converted to <GetMessage>.
+ * <GetMessage> must be the response type of GET messages route handlers.
+ */
+export interface GetMessage {
+  id: number;
+  content: string;
+  createdAt: Date;
+  conversationId: number;
+  sender: UserSummaryAfterSetUp;
+  isOwn: boolean;
+}

@@ -4,7 +4,7 @@ import { About } from './About';
 export async function generateMetadata({ params }: { params: { username: string } }) {
   const profile = await getProfile(params.username);
   return {
-    title: `About | ${profile?.name}` || 'About',
+    title: `О себе | ${profile?.name}` || 'О себе',
   };
 }
 

@@ -8,7 +8,7 @@ export const metadata = {
 export default function Page() {
   return (
     <ResponsiveContainer className="mx-auto mb-4 px-4 md:px-0">
-      <h1 className="my-4 text-3xl font-bold">Edit Profile</h1>
+      <h1 className="my-4 text-3xl font-bold">Редактирование профиля</h1>
       <EditProfileForm />
     </ResponsiveContainer>
   );

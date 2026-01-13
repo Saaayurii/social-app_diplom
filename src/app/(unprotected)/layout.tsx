@@ -24,11 +24,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </Link>
           <div className="hidden gap-3 sm:flex">
-            <HomeNavLink href="/terms">Terms</HomeNavLink>
-            <HomeNavLink href="/privacy-policy">Privacy Policy</HomeNavLink>
+            <HomeNavLink href="/terms">Условия</HomeNavLink>
+            <HomeNavLink href="/privacy-policy">Конфиденциальность</HomeNavLink>
 
-            <HomeNavLink href="/login">Login</HomeNavLink>
-            <HomeNavLink href="/register">Sign Up</HomeNavLink>
+            <HomeNavLink href="/login">Войти</HomeNavLink>
+            <HomeNavLink href="/register">Регистрация</HomeNavLink>
           </div>
           <div className="sm:hidden">
             <HomeMobileDropdownMenu />

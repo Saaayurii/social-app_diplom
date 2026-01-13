@@ -93,21 +93,21 @@ export function Notifications({ userId }: { userId: string }) {
     <div>
       <div className="flex justify-between">
         <div className="mb-4 flex items-center gap-2">
-          <h1 className="text-4xl font-bold">Notifications</h1>
+          <h1 className="text-4xl font-bold">Уведомления</h1>
         </div>
         <DropdownMenuButton
           key="notifications-option"
-          label="Notifications option"
+          label="Опции уведомлений"
           onAction={markAllAsRead}
           disabledKeys={disabledKeys}>
           <Section>
-            <Item key="mark-all">Mark all as read</Item>
+            <Item key="mark-all">Отметить все как прочитанные</Item>
           </Section>
         </DropdownMenuButton>
       </div>
       <div>
         {isPending ? (
-          <GenericLoading>Loading notifications</GenericLoading>
+          <GenericLoading>Загрузка уведомлений</GenericLoading>
         ) : (
           data?.pages.flat().map((activity) => <Activity key={activity.id} {...activity} />)
         )}
@@ -121,7 +121,7 @@ export function Notifications({ userId }: { userId: string }) {
          * so the bottom loader has to be hidden first
          */
         style={bottomLoaderStyle}>
-        {isFetchingNextPage && <GenericLoading>Loading more notifications</GenericLoading>}
+        {isFetchingNextPage && <GenericLoading>Загрузка уведомлений...</GenericLoading>}
       </div>
       {isError && error.message !== NO_PREV_DATA_LOADED && <SomethingWentWrong />}
       {!isPending && !isFetchingNextPage && !hasNextPage && <AllCaughtUp />}

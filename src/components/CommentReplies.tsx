@@ -24,8 +24,8 @@ export function CommentReplies({ parentId }: { parentId: number }) {
   const { likeComment, unLikeComment } = useLikeUnlikeComments({ queryKey });
   const { shouldAnimate } = useShouldAnimate();
 
-  if (isPending) return <p className="text-sm font-semibold text-gray-500">Loading replies...</p>;
-  if (isError) return <p className="text-sm font-semibold text-gray-500">Error loading replies.</p>;
+  if (isPending) return <p className="text-sm font-semibold text-gray-500">Загрузка ответов...</p>;
+  if (isError) return <p className="text-sm font-semibold text-gray-500">Ошибка загрузки ответов.</p>;
 
   return (
     <div>

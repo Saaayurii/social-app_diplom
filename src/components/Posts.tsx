@@ -222,14 +222,14 @@ export function Posts({ type, hashtag, userId }: PostsProps) {
                   <SvgForwardArrow className="h-5 w-5" />
                 </div>
                 <p className="text-primary-foreground">
-                  <b>{numberOfNewPostsLoaded}</b> new {numberOfNewPostsLoaded > 1 ? 'posts' : 'post'} loaded
+                  <b>{numberOfNewPostsLoaded}</b> {numberOfNewPostsLoaded > 1 ? 'новых публикаций' : 'новая публикация'}
                 </p>
               </ButtonNaked>
             </motion.div>
           )}
         </AnimatePresence>
         {isPending ? (
-          <GenericLoading>Loading posts</GenericLoading>
+          <GenericLoading>Загрузка публикаций</GenericLoading>
         ) : (
           <AnimatePresence>
             {data?.pages.map((page) =>
@@ -257,7 +257,7 @@ export function Posts({ type, hashtag, userId }: PostsProps) {
          * so the bottom loader has to be hidden first
          */
         style={bottomLoaderStyle}>
-        {isFetchingNextPage && <GenericLoading>Loading more posts...</GenericLoading>}
+        {isFetchingNextPage && <GenericLoading>Загрузка публикаций...</GenericLoading>}
       </div>
       {isError && error.message !== NO_PREV_DATA_LOADED && <SomethingWentWrong />}
       {!isPending && !isFetchingNextPage && !hasNextPage && <AllCaughtUp />}

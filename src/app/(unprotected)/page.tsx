@@ -30,45 +30,45 @@ export default function Page() {
       </div>
 
       <div className="mt-20">
-        <h2 className="text-center text-3xl sm:text-5xl">Technology Stack</h2>
+        <h2 className="text-center text-3xl sm:text-5xl">Технологии</h2>
         <p className="mt-2 px-4 text-center text-lg text-muted-foreground">
-          This social media web app is built using the following modern technologies.
+          Это веб-приложение создано с использованием современных технологий.
         </p>
         <div className="mt-6 grid grid-cols-2 gap-3 px-4 md:grid-cols-3">
           {[
             {
               header: 'TypeScript',
-              details: 'Strongly-typed code and components for maintainability.',
+              details: 'Строго типизированный код для надёжности.',
             },
             {
               header: 'Next.js 14',
-              details: 'App router, route handlers, nested layouts, and more.',
+              details: 'App router, обработчики маршрутов, вложенные layout.',
             },
-            { header: 'React 18', details: 'Server and client components.' },
+            { header: 'React 18', details: 'Серверные и клиентские компоненты.' },
             {
               header: 'Prisma',
-              details: 'Type-safe and intuitive database ORM.',
+              details: 'Типобезопасная и удобная ORM для базы данных.',
             },
             {
               header: 'NextAuth.js 5',
-              details: 'Secure email and social OAuth logins.',
+              details: 'Безопасная авторизация через email и OAuth.',
             },
             {
               header: 'React Query',
-              details: 'Efficient data-fetching and caching.',
+              details: 'Эффективная загрузка и кэширование данных.',
             },
             {
               header: 'Tailwind CSS',
-              details: 'Utility classes for building components.',
+              details: 'Утилитарные классы для создания компонентов.',
             },
-            { header: 'Framer Motion', details: 'Animation for components.' },
+            { header: 'Framer Motion', details: 'Анимации для компонентов.' },
             {
               header: 'React Aria',
-              details: 'Provides accessibility hooks for components.',
+              details: 'Хуки для обеспечения доступности компонентов.',
             },
-            { header: 'Zod', details: 'Form input validation.' },
-            { header: 'AWS S3', details: 'Storage for photos and videos.' },
-            { header: 'AWS SES', details: 'For sending vefirication emails.' },
+            { header: 'Zod', details: 'Валидация форм.' },
+            { header: 'AWS S3', details: 'Хранение фото и видео.' },
+            { header: 'AWS SES', details: 'Отправка писем для подтверждения.' },
           ].map(({ header, details }) => (
             <TechStackCard header={header} key={header}>
               {details}

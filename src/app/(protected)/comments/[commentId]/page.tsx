@@ -16,7 +16,7 @@ export default async function Page({ params }: { params: { commentId: string } }
       parentId: true,
     },
   });
-  if (!comment) return <p>This comment or reply no longer exists.</p>;
+  if (!comment) return <p>Этот комментарий или ответ больше не существует.</p>;
   const { id: commentId, parentId, postId } = comment;
 
   const searchParams = new URLSearchParams('');

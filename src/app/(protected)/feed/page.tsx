@@ -12,7 +12,7 @@ export default async function Page() {
   return (
     <div className="px-4 pt-4">
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-4xl font-bold">Feed</h1>
+        <h1 className="text-4xl font-bold">Лента</h1>
         <div>
           <ThemeSwitch />
         </div>

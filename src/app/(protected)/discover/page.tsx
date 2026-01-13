@@ -9,7 +9,7 @@ export const metadata = {
 export default async function Discover() {
   return (
     <div className="px-4 pt-4">
-      <h1 className="mb-4 text-4xl font-bold">Discover</h1>
+      <h1 className="mb-4 text-4xl font-bold">Поиск</h1>
       <DiscoverSearch />
       <DiscoverFilters />
       <DiscoverProfiles />
