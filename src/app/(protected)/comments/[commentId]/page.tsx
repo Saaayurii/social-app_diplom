@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma/prisma';
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
 /**
  * Use this page to redirect the user to the respective /posts/:postId
@@ -16,7 +16,7 @@ export default async function Page({ params }: { params: { commentId: string } }
       parentId: true,
     },
   });
-  if (!comment) return <p>Этот комментарий или ответ больше не существует.</p>;
+  if (!comment) notFound();
   const { id: commentId, parentId, postId } = comment;
 
   const searchParams = new URLSearchParams('');

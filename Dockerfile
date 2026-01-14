@@ -46,6 +46,16 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/next.config.js ./next.config.js
 
+# Copy node_modules for seed scripts (bcryptjs, @faker-js/faker, date-fns, @paralleldrive/cuid2)
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder /app/node_modules/bcryptjs ./node_modules/bcryptjs
+COPY --from=builder /app/node_modules/@faker-js ./node_modules/@faker-js
+COPY --from=builder /app/node_modules/date-fns ./node_modules/date-fns
+COPY --from=builder /app/node_modules/@paralleldrive ./node_modules/@paralleldrive
+COPY --from=builder /app/node_modules/@babel ./node_modules/@babel
+COPY --from=builder /app/node_modules/@noble ./node_modules/@noble
+
 # Copy built application
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static

@@ -240,3 +240,23 @@ model Message {
   sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
   senderId       String
 }
+
+// === Admin Panel ===
+
+model Admin {
+  id          String    @id @default(cuid())
+  email       String    @unique
+  password    String    // bcrypt hash
+  name        String
+  role        AdminRole @default(MODERATOR)
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  lastLoginAt DateTime?
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  MODERATOR
+}

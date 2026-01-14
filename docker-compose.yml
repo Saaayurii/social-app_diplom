@@ -47,7 +47,7 @@ services:
         condition: service_healthy
     networks:
       - social-network
-    command: sh -c "npx prisma migrate deploy && node server.js"
+    command: sh -c "npx prisma migrate deploy && node scripts/seedAdmin.mjs && (node scripts/createMockUsers.mjs || echo 'Skipping mock users seed') && node server.js"
 
 volumes:
   postgres_data:

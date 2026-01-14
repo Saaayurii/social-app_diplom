@@ -1,4 +1,5 @@
 import { getServerUser } from '@/lib/getServerUser';
+import { notFound } from 'next/navigation';
 import React from 'react';
 import { ProfileHeader } from './ProfileHeader';
 import { getProfile } from '../getProfile';
@@ -12,7 +13,7 @@ export default async function Layout({
 }) {
   const [user] = await getServerUser();
   const profile = await getProfile(params.username);
-  if (!profile) return <p>This user does not exist or may have changed their username.</p>;
+  if (!profile) notFound();
   const isOwnProfile = profile.id === user?.id;
 
   return (

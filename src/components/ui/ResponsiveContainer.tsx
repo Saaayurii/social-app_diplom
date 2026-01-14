@@ -6,7 +6,7 @@ interface ResponsiveContainerProps extends React.HTMLAttributes<HTMLDivElement> 
 }
 export function ResponsiveContainer({ children, ...rest }: ResponsiveContainerProps) {
   return (
-    <div {...rest} className={cn('w-full md:w-[600px]', rest.className)}>
+    <div {...rest} className={cn('w-full md:w-[600px] xl:w-[640px]', rest.className)}>
       {children}
     </div>
   );
