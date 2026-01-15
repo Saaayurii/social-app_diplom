@@ -10,7 +10,10 @@ export async function POST(
   request: Request,
   { params }: { params: { conversationId: string } }
 ) {
+  console.log('POST /messages called, conversationId:', params.conversationId);
+
   const [user] = await getServerUser();
+  console.log('User:', user?.id);
   if (!user) return NextResponse.json({}, { status: 401 });
   const userId = user.id;
   const conversationId = parseInt(params.conversationId, 10);
@@ -21,6 +24,7 @@ export async function POST(
       conversationId_userId: { conversationId, userId },
     },
   });
+  console.log('Participant:', participant);
 
   if (!participant) {
     return NextResponse.json({ error: 'Доступ запрещён' }, { status: 403 });
@@ -28,6 +32,7 @@ export async function POST(
 
   try {
     const body = await request.json();
+    console.log('Body:', body);
     const { content } = messageWriteSchema.parse(body);
 
     const message = await prisma.message.create({
@@ -58,12 +63,17 @@ export async function POST(
       toGetMessage(message as unknown as FindMessageResult, userId)
     );
   } catch (error) {
+    console.error('Error creating message:', error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: error.issues[0].message },
         { status: 422 }
       );
     }
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    // Временно возвращаем детали ошибки для отладки
+    return NextResponse.json(
+      { error: 'Internal server error', details: String(error), stack: error instanceof Error ? error.stack : undefined },
+      { status: 500 }
+    );
   }
 }

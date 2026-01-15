@@ -4,13 +4,14 @@ import Button from '@/components/ui/Button';
 import { useUpdateProfileAndCoverPhotoClient } from '@/hooks/useUpdateProfileAndCoverPhotoClient';
 import { useVisualMediaModal } from '@/hooks/useVisualMediaModal';
 import SvgImage from '@/svg_components/Image';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 export default function CoverPhoto({ isOwnProfile, photoUrl }: { isOwnProfile: boolean; photoUrl: string | null }) {
+  const [imageError, setImageError] = useState(false);
   const { inputFileRef, openInput, handleChange, isPending } = useUpdateProfileAndCoverPhotoClient('cover');
   const { showVisualMediaModal } = useVisualMediaModal();
   const openCoverPhoto = useCallback(() => {
-    if (photoUrl) {
+    if (photoUrl && !imageError) {
       showVisualMediaModal({
         visualMedia: [
           {
@@ -21,11 +22,13 @@ export default function CoverPhoto({ isOwnProfile, photoUrl }: { isOwnProfile: b
         initialSlide: 0,
       });
     }
-  }, [photoUrl, showVisualMediaModal]);
+  }, [photoUrl, imageError, showVisualMediaModal]);
+
+  const hasValidPhoto = photoUrl && !imageError;
 
   return (
     <div className="h-full w-full">
-      {photoUrl && <img src={photoUrl} alt="" className="absolute h-full w-full object-cover" />}
+      {hasValidPhoto && <img src={photoUrl} alt="" className="absolute h-full w-full object-cover" onError={() => setImageError(true)} />}
       <button
         type="button"
         aria-label="Open cover photo"

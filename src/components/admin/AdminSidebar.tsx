@@ -12,28 +12,28 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  { label: 'Dashboard', href: '/admin' },
-  { label: 'Users', href: '/admin/users', section: 'users' },
-  { label: 'Accounts', href: '/admin/accounts' },
-  { label: 'Sessions', href: '/admin/sessions' },
-  { label: 'Verification Tokens', href: '/admin/verification-tokens' },
-  { label: 'Posts', href: '/admin/posts', section: 'content' },
-  { label: 'Post Likes', href: '/admin/post-likes' },
-  { label: 'Visual Media', href: '/admin/visual-media' },
-  { label: 'Comments', href: '/admin/comments' },
-  { label: 'Comment Likes', href: '/admin/comment-likes' },
-  { label: 'Follows', href: '/admin/follows', section: 'social' },
-  { label: 'Activities', href: '/admin/activities' },
-  { label: 'Conversations', href: '/admin/conversations', section: 'messages' },
-  { label: 'Participants', href: '/admin/conversation-participants' },
-  { label: 'Messages', href: '/admin/messages' },
+  { label: 'Панель управления', href: '/admin' },
+  { label: 'Пользователи', href: '/admin/users', section: 'users' },
+  { label: 'Аккаунты', href: '/admin/accounts' },
+  { label: 'Сессии', href: '/admin/sessions' },
+  { label: 'Токены верификации', href: '/admin/verification-tokens' },
+  { label: 'Посты', href: '/admin/posts', section: 'content' },
+  { label: 'Лайки постов', href: '/admin/post-likes' },
+  { label: 'Медиафайлы', href: '/admin/visual-media' },
+  { label: 'Комментарии', href: '/admin/comments' },
+  { label: 'Лайки комментариев', href: '/admin/comment-likes' },
+  { label: 'Подписки', href: '/admin/follows', section: 'social' },
+  { label: 'Активности', href: '/admin/activities' },
+  { label: 'Диалоги', href: '/admin/conversations', section: 'messages' },
+  { label: 'Участники', href: '/admin/conversation-participants' },
+  { label: 'Сообщения', href: '/admin/messages' },
 ];
 
 const sections: Record<string, string> = {
-  users: 'Users & Auth',
-  content: 'Content',
-  social: 'Social',
-  messages: 'Messaging',
+  users: 'Пользователи и авторизация',
+  content: 'Контент',
+  social: 'Социальное',
+  messages: 'Сообщения',
 };
 
 interface AdminSidebarProps {
@@ -44,11 +44,24 @@ export function AdminSidebar({ role }: AdminSidebarProps) {
   const pathname = usePathname();
   let currentSection = '';
 
+  const roleLabels: Record<AdminRole, string> = {
+    SUPER_ADMIN: 'Супер-админ',
+    ADMIN: 'Администратор',
+    MODERATOR: 'Модератор',
+  };
+
   return (
     <aside className="flex w-64 flex-col border-r border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-      <div className="flex h-16 items-center border-b border-gray-200 px-6 dark:border-gray-700">
+      <div className="flex h-16 items-center justify-between border-b border-gray-200 px-6 dark:border-gray-700">
         <Link href="/admin" className="text-xl font-bold text-green-600 dark:text-green-400">
-          Admin Panel
+          Админ-панель
+        </Link>
+        <Link
+          href="/"
+          className="text-xs text-gray-500 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400"
+          title="На главную"
+        >
+          ← На сайт
         </Link>
       </div>
 
@@ -85,7 +98,7 @@ export function AdminSidebar({ role }: AdminSidebarProps) {
 
       <div className="border-t border-gray-200 p-4 dark:border-gray-700">
         <div className="text-xs text-gray-500 dark:text-gray-400">
-          Role: {role}
+          Роль: {roleLabels[role]}
         </div>
       </div>
     </aside>

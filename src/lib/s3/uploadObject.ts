@@ -1,14 +1,10 @@
 import 'server-only';
-import { PutObjectCommand } from '@aws-sdk/client-s3';
-import { s3Client } from './s3Client';
+import { writeFile } from 'fs/promises';
+import path from 'path';
 
 export async function uploadObject(file: Buffer, fileName: string, type: string) {
-  const command = new PutObjectCommand({
-    Bucket: process.env.S3_BUCKET_NAME,
-    Key: fileName,
-    Body: file,
-    ContentType: type,
-  });
+  const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
+  const filePath = path.join(uploadsDir, fileName);
 
-  await s3Client.send(command);
+  await writeFile(filePath, file);
 }

@@ -34,11 +34,14 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(({ classNa
     <>
       <div className="relative">
         {Icon && (
-          <div className="absolute left-5 top-[50%] translate-y-[-50%]">
+          <div className="absolute left-4 top-[50%] z-10 translate-y-[-50%]">
             <Icon
-              className={cn(isError ? 'stroke-destructive-foreground' : 'stroke-muted-foreground')}
-              width={24}
-              height={24}
+              className={cn(
+                'transition-colors duration-200',
+                isError ? 'stroke-destructive-foreground' : 'stroke-muted-foreground'
+              )}
+              width={20}
+              height={20}
             />
           </div>
         )}
@@ -46,34 +49,39 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(({ classNa
           {...inputProps}
           ref={ref}
           className={cn(
-            'peer w-full rounded-2xl bg-input pb-2 pr-5 pt-8 outline-none ring-foreground focus:ring-2',
-            Icon ? 'pl-16' : 'pl-5',
-            isError && 'bg-destructive ring-destructive-foreground focus:ring-4',
+            'peer w-full rounded-xl border border-border bg-background px-4 pb-2 pt-7 text-foreground shadow-sm outline-none transition-all duration-200',
+            'hover:border-muted-foreground/50',
+            'focus:border-primary focus:ring-2 focus:ring-primary/20',
+            Icon ? 'pl-12' : 'px-4',
+            isError && 'border-destructive-foreground bg-destructive/30 focus:border-destructive-foreground focus:ring-destructive-foreground/20',
             className,
           )}
           placeholder=" "
         />
         <label
           className={cn(
-            'absolute top-[9px] z-0 translate-y-0 cursor-text text-sm transition-all peer-placeholder-shown:top-[50%] peer-placeholder-shown:translate-y-[-50%] peer-placeholder-shown:text-lg peer-focus:top-[9px] peer-focus:translate-y-0 peer-focus:text-sm',
-            Icon ? 'left-16' : 'left-5',
-            isError ? 'text-destructive-foreground' : 'text-muted-foreground',
+            'pointer-events-none absolute z-0 origin-left translate-y-0 cursor-text text-xs font-medium transition-all duration-200',
+            'peer-placeholder-shown:top-[50%] peer-placeholder-shown:translate-y-[-50%] peer-placeholder-shown:text-base peer-placeholder-shown:font-normal',
+            'peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:font-medium',
+            'top-2',
+            Icon ? 'left-12' : 'left-4',
+            isError ? 'text-destructive-foreground' : 'text-muted-foreground peer-focus:text-primary',
           )}
           {...labelProps}>
           {label}
         </label>
         <Button
           Icon={SvgClose}
-          iconClassName="stroke-muted-foreground"
+          iconClassName="stroke-muted-foreground hover:stroke-foreground transition-colors"
           mode="ghost"
           size="small"
           onPress={clear}
-          className="absolute right-5 top-[50%] z-[1] block translate-y-[-50%] peer-placeholder-shown:hidden"
+          className="absolute right-2 top-[50%] z-[1] block translate-y-[-50%] opacity-0 transition-opacity peer-focus:opacity-100 peer-[:not(:placeholder-shown)]:opacity-100"
           aria-label="Clear"
         />
       </div>
       {isError && (
-        <p className="mt-2 font-medium text-foreground" {...errorMessageProps}>
+        <p className="mt-2 text-sm font-medium text-destructive-foreground" {...errorMessageProps}>
           {errorMessage as string}
         </p>
       )}

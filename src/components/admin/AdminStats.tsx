@@ -10,12 +10,12 @@ interface StatsProps {
 }
 
 const statItems = [
-  { key: 'totalUsers', label: 'Users', color: 'bg-blue-500' },
-  { key: 'totalPosts', label: 'Posts', color: 'bg-green-500' },
-  { key: 'totalComments', label: 'Comments', color: 'bg-yellow-500' },
-  { key: 'totalConversations', label: 'Conversations', color: 'bg-purple-500' },
-  { key: 'totalMessages', label: 'Messages', color: 'bg-pink-500' },
-  { key: 'totalFollows', label: 'Follows', color: 'bg-indigo-500' },
+  { key: 'totalUsers', label: 'Пользователи', color: 'bg-blue-500' },
+  { key: 'totalPosts', label: 'Посты', color: 'bg-green-500' },
+  { key: 'totalComments', label: 'Комментарии', color: 'bg-yellow-500' },
+  { key: 'totalConversations', label: 'Диалоги', color: 'bg-purple-500' },
+  { key: 'totalMessages', label: 'Сообщения', color: 'bg-pink-500' },
+  { key: 'totalFollows', label: 'Подписки', color: 'bg-indigo-500' },
 ];
 
 export function AdminStats({ stats }: StatsProps) {
@@ -33,7 +33,7 @@ export function AdminStats({ stats }: StatsProps) {
                 {item.label}
               </p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {stats[item.key as keyof typeof stats].toLocaleString()}
+                {stats[item.key as keyof typeof stats].toLocaleString('ru-RU')}
               </p>
             </div>
           </div>

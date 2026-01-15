@@ -42,23 +42,25 @@ export function DatePicker({ triggerRef, ...props }: DatePickerProps) {
     <>
       <div
         className={cn(
-          'relative flex-col rounded-2xl bg-input pb-2 pr-5 pt-8 text-left outline-none ring-foreground focus-within:ring-2',
-          isError && 'bg-destructive ring-destructive-foreground focus-within:ring-4',
+          'relative flex-col rounded-xl border border-border bg-background pb-2 pr-4 pt-7 text-left shadow-sm outline-none transition-all duration-200',
+          'hover:border-muted-foreground/50',
+          'focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20',
+          isError && 'border-destructive-foreground bg-destructive/30 focus-within:border-destructive-foreground focus-within:ring-destructive-foreground/20',
         )}>
         <span
           {...labelProps}
           className={cn(
-            'absolute left-16 top-[9px] text-sm',
+            'absolute left-12 top-2 text-xs font-medium transition-colors duration-200',
             isError ? 'text-destructive-foreground' : 'text-muted-foreground',
           )}>
           {props.label}
         </span>
 
-        <ButtonNaked {...buttonProps} ref={assignRef} className="absolute left-5 top-[50%] translate-y-[-50%]">
-          <SvgCalendar className="h-6 w-6 stroke-muted-foreground hover:stroke-foreground group-focus-within:stroke-black" />
+        <ButtonNaked {...buttonProps} ref={assignRef} className="absolute left-4 top-[50%] translate-y-[-50%]">
+          <SvgCalendar className="h-5 w-5 stroke-muted-foreground transition-colors duration-200 hover:stroke-foreground" />
         </ButtonNaked>
-        <div {...groupProps} ref={ref} className="group ml-16 flex">
-          <div className="relative flex items-center rounded-md border border-muted p-1 transition-colors group-focus-within:border-muted-foreground group-hover:border-muted-foreground group-focus-within:group-hover:border-muted-foreground">
+        <div {...groupProps} ref={ref} className="group ml-12 flex">
+          <div className="relative flex items-center rounded-lg border border-border bg-background/50 px-2 py-1 transition-colors group-focus-within:border-primary/50 group-hover:border-muted-foreground/50">
             <DateField {...fieldProps} />
           </div>
         </div>
@@ -71,16 +73,16 @@ export function DatePicker({ triggerRef, ...props }: DatePickerProps) {
         )}
         <Button
           Icon={SvgClose}
-          iconClassName="stroke-muted-foreground"
+          iconClassName="stroke-muted-foreground hover:stroke-foreground transition-colors"
           mode="ghost"
           size="small"
           onPress={clear}
-          className={cn('absolute right-5 top-[50%] z-[1] hidden translate-y-[-50%]', state.value !== null && 'block')}
+          className={cn('absolute right-2 top-[50%] z-[1] hidden translate-y-[-50%]', state.value !== null && 'block')}
           aria-label="Clear"
         />
       </div>
       {isError && (
-        <p className="mt-2 font-medium text-foreground" {...errorMessageProps}>
+        <p className="mt-2 text-sm font-medium text-destructive-foreground" {...errorMessageProps}>
           {props.errorMessage as string}
         </p>
       )}

@@ -38,11 +38,14 @@ export const Select = forwardRef(
       <>
         <div className="relative">
           {Icon && (
-            <div className="absolute left-5 top-[50%] translate-y-[-50%]">
+            <div className="absolute left-4 top-[50%] z-10 translate-y-[-50%]">
               <Icon
-                className={cn(isError ? 'stroke-destructive-foreground' : 'stroke-muted-foreground')}
-                width={24}
-                height={24}
+                className={cn(
+                  'transition-colors duration-200',
+                  isError ? 'stroke-destructive-foreground' : 'stroke-muted-foreground'
+                )}
+                width={20}
+                height={20}
               />
             </div>
           )}
@@ -51,10 +54,11 @@ export const Select = forwardRef(
             {...labelProps}
             type="button"
             className={cn(
-              'absolute left-5 cursor-pointer text-muted-foreground transition-all',
-              isThereASelectedValue ? 'top-[9px] translate-y-0 text-sm' : 'top-[50%] translate-y-[-50%] text-lg',
-              Icon ? 'left-16' : 'left-5',
+              'pointer-events-none absolute z-10 cursor-pointer text-muted-foreground transition-all duration-200',
+              isThereASelectedValue ? 'top-2 translate-y-0 text-xs font-medium' : 'top-[50%] translate-y-[-50%] text-base font-normal',
+              Icon ? 'left-12' : 'left-4',
               isError ? 'text-destructive-foreground' : 'text-muted-foreground',
+              state.isOpen && 'text-primary',
             )}
             onClick={open}>
             {label}
@@ -65,9 +69,12 @@ export const Select = forwardRef(
             type="button"
             ref={ref}
             className={cn(
-              'w-full rounded-2xl bg-input pb-2 pl-5 pr-5 pt-8 text-left outline-none ring-foreground focus:ring-2',
-              Icon ? 'pl-16' : 'pl-5',
-              isError && 'bg-destructive ring-destructive-foreground focus:ring-4',
+              'w-full rounded-xl border border-border bg-background px-4 pb-2 pt-7 text-left text-foreground shadow-sm outline-none transition-all duration-200',
+              'hover:border-muted-foreground/50',
+              'focus:border-primary focus:ring-2 focus:ring-primary/20',
+              Icon ? 'pl-12' : 'px-4',
+              isError && 'border-destructive-foreground bg-destructive/30 focus:border-destructive-foreground focus:ring-destructive-foreground/20',
+              state.isOpen && 'border-primary ring-2 ring-primary/20',
             )}>
             <span
               {...valueProps}
@@ -75,34 +82,39 @@ export const Select = forwardRef(
               className={cn(!isThereASelectedValue && 'text-transparent')}>
               {isThereASelectedValue ? state.selectedItem.rendered : 'Select an option'}
             </span>
-            {!isThereASelectedValue && (
-              <div className="absolute right-5 top-[50%] z-[1] translate-y-[-50%] p-3">
-                <SvgArrowChevronDown
-                  className={cn('h-5 w-5 stroke-muted-foreground transition-transform', state.isOpen && 'rotate-180')}
-                />
-              </div>
-            )}
+            <div className={cn(
+              'absolute right-3 top-[50%] z-[1] translate-y-[-50%] p-2',
+              isThereASelectedValue && 'hidden'
+            )}>
+              <SvgArrowChevronDown
+                className={cn(
+                  'h-5 w-5 stroke-muted-foreground transition-transform duration-200',
+                  state.isOpen && 'rotate-180 stroke-primary'
+                )}
+              />
+            </div>
           </button>
           {state.isOpen && (
             <Popover state={state} triggerRef={ref} placement="bottom start" className="min-w-[200px]">
               <ListBox {...menuProps} state={state} />
             </Popover>
           )}
-          <div className="absolute right-5 top-[50%] z-[1] translate-y-[-50%]">
-            {isThereASelectedValue && (
-              <Button
-                Icon={SvgClose}
-                iconClassName="stroke-muted-foreground"
-                mode="ghost"
-                size="small"
-                onPress={clear}
-                aria-label="Clear"
-              />
-            )}
+          <div className={cn(
+            'absolute right-2 top-[50%] z-[1] translate-y-[-50%]',
+            !isThereASelectedValue && 'hidden'
+          )}>
+            <Button
+              Icon={SvgClose}
+              iconClassName="stroke-muted-foreground hover:stroke-foreground transition-colors"
+              mode="ghost"
+              size="small"
+              onPress={clear}
+              aria-label="Clear"
+            />
           </div>
         </div>
         {isError && (
-          <p className="mt-2 font-medium text-foreground" {...errorMessageProps}>
+          <p className="mt-2 text-sm font-medium text-destructive-foreground" {...errorMessageProps}>
             {errorMessage as string}
           </p>
         )}

@@ -25,7 +25,7 @@ export function AdminPagination({
   return (
     <div className="flex items-center justify-between">
       <p className="text-sm text-gray-500 dark:text-gray-400">
-        Showing {start} to {end} of {totalCount} results
+        Показано {start}–{end} из {totalCount}
       </p>
 
       <div className="flex gap-2">
@@ -35,7 +35,7 @@ export function AdminPagination({
           isDisabled={page <= 1}
           onPress={() => onPageChange(page - 1)}
         >
-          Previous
+          Назад
         </Button>
 
         {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -68,7 +68,7 @@ export function AdminPagination({
           isDisabled={page >= totalPages}
           onPress={() => onPageChange(page + 1)}
         >
-          Next
+          Вперед
         </Button>
       </div>
     </div>

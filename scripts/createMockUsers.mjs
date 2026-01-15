@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker/locale/ru';
 import { subHours } from 'date-fns';
 import { createId } from '@paralleldrive/cuid2';
 
@@ -7,6 +7,85 @@ const prisma = new PrismaClient();
 
 let maleAvatars = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 let femaleAvatars = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+// Русские посты
+const russianPosts = [
+  'Прекрасный день для новых начинаний!',
+  'Только что закончил интересный проект. Очень доволен результатом.',
+  'Иногда нужно просто остановиться и насладиться моментом.',
+  'Делюсь своими мыслями о современных технологиях.',
+  'Сегодня был продуктивный день на работе.',
+  'Встретил старого друга, было очень приятно пообщаться.',
+  'Читаю интересную книгу, рекомендую всем!',
+  'Природа всегда вдохновляет на новые идеи.',
+  'Работа над собой — это лучшая инвестиция.',
+  'Каждый день — это новая возможность стать лучше.',
+  'Путешествия расширяют кругозор и дарят незабываемые впечатления.',
+  'Спорт — это не только здоровье, но и отличное настроение!',
+  'Музыка помогает справиться с любыми трудностями.',
+  'Время, проведённое с семьёй — бесценно.',
+  'Новый рецепт получился просто потрясающим!',
+  'Фильм, который я посмотрел вчера, оставил глубокое впечатление.',
+  'Учиться никогда не поздно, главное — желание.',
+  'Маленькие победы ведут к большим достижениям.',
+  'Благодарен за всё хорошее, что есть в моей жизни.',
+  'Иногда лучший отдых — это просто побыть наедине с собой.',
+];
+
+// Русские комментарии
+const russianComments = [
+  'Отличный пост! Полностью согласен.',
+  'Спасибо за то, что делишься своими мыслями!',
+  'Очень интересно, расскажи подробнее!',
+  'Прекрасные слова, вдохновляет!',
+  'Как же это верно!',
+  'Поддерживаю! Сам так думаю.',
+  'Классно сказано!',
+  'Это точно! Согласен на все 100%.',
+  'Спасибо за позитив!',
+  'Очень актуально сейчас.',
+  'Вдохновляющие слова!',
+  'Полезная информация, благодарю!',
+  'Интересный взгляд на вещи.',
+  'Молодец! Так держать!',
+  'Замечательно написано.',
+];
+
+// Русские сообщения для диалогов
+const russianMessages = [
+  'Привет! Как дела?',
+  'Всё отлично, спасибо! А у тебя?',
+  'Тоже хорошо. Чем занимаешься?',
+  'Работаю над новым проектом, очень интересно.',
+  'Звучит здорово! Расскажешь потом?',
+  'Конечно! Может встретимся на выходных?',
+  'С удовольствием! Давай в субботу?',
+  'Отлично, договорились!',
+  'Привет! Давно не общались.',
+  'Да, надо чаще встречаться!',
+  'Как твоя семья?',
+  'Все хорошо, спасибо что спросил!',
+  'Смотрел вчера интересный фильм.',
+  'Какой? Порекомендуешь?',
+  'Да, обязательно! Тебе понравится.',
+  'Спасибо за совет!',
+  'Как прошёл твой день?',
+  'Был продуктивный день, много успел.',
+  'Это здорово! Рад за тебя.',
+  'Спасибо! Ты тоже молодец!',
+];
+
+function getRandomPost() {
+  return russianPosts[Math.floor(Math.random() * russianPosts.length)];
+}
+
+function getRandomComment() {
+  return russianComments[Math.floor(Math.random() * russianComments.length)];
+}
+
+function getRandomMessage() {
+  return russianMessages[Math.floor(Math.random() * russianMessages.length)];
+}
 
 function getRandomItemAndRemove(array) {
   // Generate a random index
@@ -68,10 +147,10 @@ function createRandomUser() {
     femaleAvatars = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const profilePhotoPath = `seed-${gender}-avatars/${randomProfilePhoto}`;
 
-  // Create fake posts
+  // Создание постов
   const fakePosts = Array.from({ length: 3 }).map((item, i) => ({
     userId: id,
-    content: faker.lorem.sentence(),
+    content: getRandomPost(),
     createdAt: subHours(new Date(), i),
   }));
 
@@ -95,11 +174,11 @@ function createRandomUser() {
 }
 
 async function main() {
-  console.log('🌱 Starting database seeding...');
+  console.log('🌱 Начинаем заполнение базы данных...');
 
-  // Step 1: Create users and their posts
-  console.log('📝 Creating users and posts...');
-  const fakeUsers = Array.from({ length: 100 }, createRandomUser);
+  // Шаг 1: Создание пользователей и их постов
+  console.log('📝 Создание пользователей и постов...');
+  const fakeUsers = Array.from({ length: 10 }, createRandomUser);
   const createdUsers = [];
 
   for (const fakeUser of fakeUsers) {
@@ -111,14 +190,14 @@ async function main() {
     });
     createdUsers.push(user);
   }
-  console.log(`✅ Created ${createdUsers.length} users with posts`);
+  console.log(`✅ Создано ${createdUsers.length} пользователей с постами`);
 
-  // Step 2: Create follows (подписки)
-  console.log('👥 Creating follow relationships...');
+  // Шаг 2: Создание подписок
+  console.log('👥 Создание подписок...');
   let followCount = 0;
   for (let i = 0; i < createdUsers.length; i++) {
-    // Each user follows 5-15 random other users
-    const numberOfFollows = Math.floor(Math.random() * 11) + 5;
+    // Each user follows 2-5 random other users
+    const numberOfFollows = Math.floor(Math.random() * 4) + 2;
     const usersToFollow = createdUsers
       .filter((u) => u.id !== createdUsers[i].id)
       .sort(() => 0.5 - Math.random())
@@ -148,16 +227,16 @@ async function main() {
       }
     }
   }
-  console.log(`✅ Created ${followCount} follow relationships`);
+  console.log(`✅ Создано ${followCount} подписок`);
 
-  // Step 3: Create post likes
-  console.log('❤️  Creating post likes...');
+  // Шаг 3: Создание лайков на посты
+  console.log('❤️  Создание лайков на посты...');
   const allPosts = await prisma.post.findMany();
   let postLikeCount = 0;
 
   for (const post of allPosts) {
-    // 30-70% of users will like each post
-    const likePercentage = Math.random() * 0.4 + 0.3;
+    // 10-30% of users will like each post
+    const likePercentage = Math.random() * 0.2 + 0.1;
     const numberOfLikes = Math.floor(createdUsers.length * likePercentage);
     const usersWhoLike = createdUsers
       .filter((u) => u.id !== post.userId)
@@ -189,21 +268,21 @@ async function main() {
       }
     }
   }
-  console.log(`✅ Created ${postLikeCount} post likes`);
+  console.log(`✅ Создано ${postLikeCount} лайков на посты`);
 
-  // Step 4: Create comments
-  console.log('💬 Creating comments...');
+  // Шаг 4: Создание комментариев
+  console.log('💬 Создание комментариев...');
   let commentCount = 0;
 
   for (const post of allPosts) {
-    // 2-8 comments per post
-    const numberOfComments = Math.floor(Math.random() * 7) + 2;
+    // 1-3 comments per post
+    const numberOfComments = Math.floor(Math.random() * 3) + 1;
 
     for (let i = 0; i < numberOfComments; i++) {
       const randomUser = createdUsers[Math.floor(Math.random() * createdUsers.length)];
       const comment = await prisma.comment.create({
         data: {
-          content: faker.lorem.sentence(),
+          content: getRandomComment(),
           userId: randomUser.id,
           postId: post.id,
           createdAt: subHours(new Date(), Math.floor(Math.random() * 24)),
@@ -223,16 +302,16 @@ async function main() {
       commentCount++;
     }
   }
-  console.log(`✅ Created ${commentCount} comments`);
+  console.log(`✅ Создано ${commentCount} комментариев`);
 
-  // Step 5: Create comment likes
-  console.log('👍 Creating comment likes...');
+  // Шаг 5: Создание лайков на комментарии
+  console.log('👍 Создание лайков на комментарии...');
   const allComments = await prisma.comment.findMany();
   let commentLikeCount = 0;
 
   for (const comment of allComments) {
-    // 10-40% of users will like each comment
-    const likePercentage = Math.random() * 0.3 + 0.1;
+    // 5-20% of users will like each comment
+    const likePercentage = Math.random() * 0.15 + 0.05;
     const numberOfLikes = Math.floor(createdUsers.length * likePercentage);
     const usersWhoLike = createdUsers
       .filter((u) => u.id !== comment.userId)
@@ -264,10 +343,10 @@ async function main() {
       }
     }
   }
-  console.log(`✅ Created ${commentLikeCount} comment likes`);
+  console.log(`✅ Создано ${commentLikeCount} лайков на комментарии`);
 
-  // Step 6: Create replies to comments
-  console.log('💭 Creating comment replies...');
+  // Шаг 6: Создание ответов на комментарии
+  console.log('💭 Создание ответов на комментарии...');
   let replyCount = 0;
 
   // Create replies for 30% of comments
@@ -282,7 +361,7 @@ async function main() {
       const randomUser = createdUsers[Math.floor(Math.random() * createdUsers.length)];
       const reply = await prisma.comment.create({
         data: {
-          content: faker.lorem.sentence(),
+          content: getRandomComment(),
           userId: randomUser.id,
           postId: comment.postId,
           parentId: comment.id,
@@ -303,15 +382,15 @@ async function main() {
       replyCount++;
     }
   }
-  console.log(`✅ Created ${replyCount} comment replies`);
+  console.log(`✅ Создано ${replyCount} ответов на комментарии`);
 
-  // Step 7: Create conversations and messages
-  console.log('💌 Creating conversations and messages...');
+  // Шаг 7: Создание диалогов и сообщений
+  console.log('💌 Создание диалогов и сообщений...');
   let conversationCount = 0;
   let messageCount = 0;
 
-  // Create 30 random conversations
-  for (let i = 0; i < 30; i++) {
+  // Create 5 random conversations
+  for (let i = 0; i < 5; i++) {
     const user1 = createdUsers[Math.floor(Math.random() * createdUsers.length)];
     let user2 = createdUsers[Math.floor(Math.random() * createdUsers.length)];
 
@@ -332,13 +411,13 @@ async function main() {
     });
     conversationCount++;
 
-    // Create 5-15 messages in each conversation
-    const numberOfMessages = Math.floor(Math.random() * 11) + 5;
+    // Create 3-7 messages in each conversation
+    const numberOfMessages = Math.floor(Math.random() * 5) + 3;
     for (let j = 0; j < numberOfMessages; j++) {
       const sender = j % 2 === 0 ? user1 : user2;
       await prisma.message.create({
         data: {
-          content: faker.lorem.sentences(Math.floor(Math.random() * 2) + 1),
+          content: getRandomMessage(),
           senderId: sender.id,
           conversationId: conversation.id,
           createdAt: subHours(new Date(), numberOfMessages - j),
@@ -347,9 +426,9 @@ async function main() {
       messageCount++;
     }
   }
-  console.log(`✅ Created ${conversationCount} conversations with ${messageCount} messages`);
+  console.log(`✅ Создано ${conversationCount} диалогов с ${messageCount} сообщениями`);
 
-  console.log('🎉 Database seeding completed successfully!');
+  console.log('🎉 Заполнение базы данных успешно завершено!');
 }
 
 main()

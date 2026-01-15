@@ -1,37 +1,126 @@
-import prisma from '@/lib/prisma/prisma';
-import { AdminTable, Column } from '@/components/admin/AdminTable';
+'use client';
 
-interface PageProps {
-  searchParams: { page?: string; sortKey?: string; sortDirection?: string };
+import { useEffect, useState, useCallback } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import Button from '@/components/ui/Button';
+import { AdminPagination } from '@/components/admin/AdminPagination';
+import { cn } from '@/lib/cn';
+
+interface Session {
+  id: string;
+  expires: string;
+  user: { id: string; email: string | null; username: string | null };
 }
 
-export default async function SessionsPage({ searchParams }: PageProps) {
-  const page = parseInt(searchParams.page || '1');
+interface ApiResponse {
+  data: Session[];
+  pagination: { page: number; pageSize: number; totalCount: number; totalPages: number };
+}
+
+export default function SessionsPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const [data, setData] = useState<Session[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+
+  const page = parseInt(searchParams.get('page') || '1');
   const pageSize = 20;
-  const sortKey = searchParams.sortKey || 'expires';
-  const sortDirection = (searchParams.sortDirection || 'desc') as 'asc' | 'desc';
+  const sortKey = searchParams.get('sortKey') || 'expires';
+  const sortDirection = searchParams.get('sortDirection') || 'desc';
 
-  const [sessions, totalCount] = await Promise.all([
-    prisma.session.findMany({
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-      orderBy: { [sortKey]: sortDirection },
-      include: { user: { select: { id: true, email: true, username: true } } },
-    }),
-    prisma.session.count(),
-  ]);
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams({ page: String(page), pageSize: String(pageSize), sortKey, sortDirection });
+      const res = await fetch(`/api/admin/sessions?${params}`);
+      const json: ApiResponse = await res.json();
+      setData(json.data);
+      setTotalCount(json.pagination.totalCount);
+    } catch (e) {
+      console.error('Failed to fetch sessions', e);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, pageSize, sortKey, sortDirection]);
 
-  const columns: Column<typeof sessions[0]>[] = [
-    { key: 'id', label: 'ID', width: 'w-32', render: (s) => <span className="font-mono text-xs">{s.id.slice(0, 8)}...</span> },
-    { key: 'user', label: 'User', render: (s) => s.user?.email || s.user?.username || '-' },
-    { key: 'expires', label: 'Expires', sortable: true, render: (s) => new Date(s.expires).toLocaleString() },
-    { key: 'status', label: 'Status', render: (s) => new Date(s.expires) > new Date() ? <span className="text-green-600">Active</span> : <span className="text-red-600">Expired</span> },
+  useEffect(() => { fetchData(); }, [fetchData]);
+
+  const buildUrl = (params: Record<string, string | number>) => {
+    const url = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => { if (value) url.set(key, String(value)); });
+    return `/admin/sessions?${url.toString()}`;
+  };
+
+  const handleSort = (key: string) => {
+    const newDirection = sortKey === key && sortDirection === 'asc' ? 'desc' : 'asc';
+    router.push(buildUrl({ page: 1, sortKey: key, sortDirection: newDirection }));
+  };
+
+  const handlePageChange = (newPage: number) => router.push(buildUrl({ page: newPage, sortKey, sortDirection }));
+
+  const handleDelete = async (item: Session) => {
+    if (deleteConfirm === item.id) {
+      try { await fetch(`/api/admin/sessions/${item.id}`, { method: 'DELETE' }); fetchData(); } catch (e) { console.error(e); }
+      setDeleteConfirm(null);
+    } else {
+      setDeleteConfirm(item.id);
+    }
+  };
+
+  const totalPages = Math.ceil(totalCount / pageSize);
+  const columns = [
+    { key: 'id', label: 'ID', width: 'w-32' },
+    { key: 'user', label: 'Пользователь' },
+    { key: 'expires', label: 'Истекает', sortable: true },
+    { key: 'status', label: 'Статус' },
   ];
+
+  if (loading) return <div className="flex items-center justify-center py-12"><div className="text-gray-500 dark:text-gray-400">Загрузка...</div></div>;
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">Sessions</h1>
-      <AdminTable data={sessions} columns={columns} totalCount={totalCount} page={page} pageSize={pageSize} basePath="/admin/sessions" sortKey={sortKey} sortDirection={sortDirection} createLabel="" />
+      <h1 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">Сессии</h1>
+      <div className="space-y-4">
+        <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+          <table className="w-full">
+            <thead className="bg-gray-50 dark:bg-gray-800">
+              <tr>
+                {columns.map((col) => (
+                  <th key={col.key} className={cn('px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white', col.sortable && 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700', col.width)} onClick={() => col.sortable && handleSort(col.key)}>
+                    <div className="flex items-center gap-2">{col.label}{col.sortable && sortKey === col.key && <span>{sortDirection === 'asc' ? '↑' : '↓'}</span>}</div>
+                  </th>
+                ))}
+                <th className="w-32 px-4 py-3 text-right text-sm font-semibold text-gray-900 dark:text-white">Действия</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+              {data.length === 0 ? (
+                <tr><td colSpan={columns.length + 1} className="px-4 py-8 text-center text-gray-500 dark:text-gray-400">Данные не найдены</td></tr>
+              ) : (
+                data.map((item) => (
+                  <tr key={item.id} className="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300"><span className="font-mono text-xs">{item.id.slice(0, 8)}...</span></td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">{item.user?.email || item.user?.username || '-'}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">{new Date(item.expires).toLocaleString('ru-RU')}</td>
+                    <td className="px-4 py-3 text-sm">{new Date(item.expires) > new Date() ? <span className="text-green-600">Активна</span> : <span className="text-red-600">Истекла</span>}</td>
+                    <td className="px-4 py-3 text-right">
+                      <div className="flex justify-end gap-2">
+                        <Link href={`/admin/sessions/${item.id}`}><Button size="small" mode="ghost">Изменить</Button></Link>
+                        <Button size="small" mode="ghost" className={deleteConfirm === item.id ? 'text-red-600' : ''} onPress={() => handleDelete(item)}>{deleteConfirm === item.id ? 'Подтвердить?' : 'Удалить'}</Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+        <AdminPagination page={page} totalPages={totalPages} totalCount={totalCount} pageSize={pageSize} onPageChange={handlePageChange} />
+      </div>
     </div>
   );
 }

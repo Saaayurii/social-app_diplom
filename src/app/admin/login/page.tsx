@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import { TextInput } from '@/components/ui/TextInput';
 
@@ -27,14 +28,14 @@ export default function AdminLoginPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || 'Login failed');
+        setError(data.error || 'Ошибка входа');
         return;
       }
 
       router.push('/admin');
       router.refresh();
     } catch (err) {
-      setError('Network error. Please try again.');
+      setError('Ошибка сети. Пожалуйста, попробуйте снова.');
     } finally {
       setLoading(false);
     }
@@ -44,7 +45,7 @@ export default function AdminLoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
       <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg dark:bg-gray-800">
         <h1 className="mb-6 text-center text-2xl font-bold text-gray-900 dark:text-white">
-          Admin Panel
+          Панель администратора
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -63,11 +64,11 @@ export default function AdminLoginPage() {
           />
 
           <TextInput
-            label="Password"
+            label="Пароль"
             type="password"
             value={password}
             onChange={(val) => setPassword(val)}
-            placeholder="Enter password"
+            placeholder="Введите пароль"
           />
 
           <Button
@@ -76,13 +77,22 @@ export default function AdminLoginPage() {
             loading={loading}
             className="mt-6"
           >
-            Sign In
+            Войти
           </Button>
         </form>
 
         <p className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
-          Default: admin@example.com / admin123
+          По умолчанию: admin@example.com / admin123
         </p>
+
+        <div className="mt-6 text-center">
+          <Link
+            href="/"
+            className="text-sm text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
+          >
+            ← На главную
+          </Link>
+        </div>
       </div>
     </div>
   );

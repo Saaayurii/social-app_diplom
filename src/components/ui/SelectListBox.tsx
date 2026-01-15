@@ -36,15 +36,20 @@ function Option({ item, state }: OptionProps) {
       {...optionProps}
       ref={ref}
       className={cn(
-        'flex cursor-pointer items-center gap-[18px] px-6 py-2 outline-none',
-        isSelected && 'font-semibold',
-        isFocused && 'bg-accent',
+        'flex cursor-pointer items-center gap-3 px-4 py-2.5 outline-none transition-colors duration-150',
+        isSelected && 'font-medium',
+        isFocused && 'bg-secondary',
         isDisabled && 'opacity-50',
       )}>
-      <div className={cn('grid h-6 w-6 place-items-center rounded-md bg-input')}>
-        {isSelected && <Check className="h-[18px] w-[18px] stroke-foreground" />}
+      <div className={cn(
+        'grid h-5 w-5 place-items-center rounded-md border transition-all duration-200',
+        isSelected
+          ? 'border-primary bg-primary'
+          : 'border-border bg-background'
+      )}>
+        {isSelected && <Check className="h-3.5 w-3.5 stroke-primary-foreground stroke-[3]" />}
       </div>
-      <p className={cn('text-lg', isFocused ? 'text-accent-foreground' : 'text-muted-foreground')}>{item.rendered}</p>
+      <p className={cn('text-base', isFocused ? 'text-foreground' : 'text-muted-foreground')}>{item.rendered}</p>
     </li>
   );
 }

@@ -26,7 +26,8 @@ export function Chat({
   });
 
   const conversation = useMemo(() => {
-    return conversationsData?.find((c) => c.id === conversationId);
+    if (!conversationsData || !Array.isArray(conversationsData)) return undefined;
+    return conversationsData.find((c) => c.id === conversationId);
   }, [conversationsData, conversationId]);
 
   const { data, isPending, fetchNextPage, hasNextPage, isFetchingNextPage } =

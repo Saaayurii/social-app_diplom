@@ -1,48 +1,144 @@
-import prisma from '@/lib/prisma/prisma';
-import { AdminTable, Column } from '@/components/admin/AdminTable';
+'use client';
 
-interface PageProps {
-  searchParams: { page?: string; search?: string; sortKey?: string; sortDirection?: string };
+import { useEffect, useState, useCallback } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import Button from '@/components/ui/Button';
+import { AdminPagination } from '@/components/admin/AdminPagination';
+import { AdminSearchInput } from '@/components/admin/AdminSearchInput';
+import { cn } from '@/lib/cn';
+
+interface Comment {
+  id: number;
+  content: string;
+  createdAt: string;
+  postId: number;
+  user: { id: string; username: string | null };
+  _count: { commentLikes: number; replies: number };
 }
 
-export default async function CommentsPage({ searchParams }: PageProps) {
-  const page = parseInt(searchParams.page || '1');
+interface ApiResponse {
+  data: Comment[];
+  pagination: { page: number; pageSize: number; totalCount: number; totalPages: number };
+}
+
+export default function CommentsPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const [data, setData] = useState<Comment[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
+
+  const page = parseInt(searchParams.get('page') || '1');
   const pageSize = 20;
-  const search = searchParams.search || '';
-  const sortKey = searchParams.sortKey || 'id';
-  const sortDirection = (searchParams.sortDirection || 'desc') as 'asc' | 'desc';
+  const search = searchParams.get('search') || '';
+  const sortKey = searchParams.get('sortKey') || 'id';
+  const sortDirection = searchParams.get('sortDirection') || 'desc';
 
-  const where = search ? { content: { contains: search, mode: 'insensitive' as const } } : {};
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams({ page: String(page), pageSize: String(pageSize), search, sortKey, sortDirection });
+      const res = await fetch(`/api/admin/comments?${params}`);
+      const json: ApiResponse = await res.json();
+      setData(json.data);
+      setTotalCount(json.pagination.totalCount);
+    } catch (e) {
+      console.error('Failed to fetch comments', e);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, pageSize, search, sortKey, sortDirection]);
 
-  const [comments, totalCount] = await Promise.all([
-    prisma.comment.findMany({
-      where,
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-      orderBy: { [sortKey]: sortDirection },
-      include: {
-        user: { select: { id: true, username: true } },
-        post: { select: { id: true } },
-        _count: { select: { commentLikes: true, replies: true } },
-      },
-    }),
-    prisma.comment.count({ where }),
-  ]);
+  useEffect(() => { fetchData(); }, [fetchData]);
 
-  const columns: Column<typeof comments[0]>[] = [
+  const buildUrl = (params: Record<string, string | number>) => {
+    const url = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => { if (value) url.set(key, String(value)); });
+    return `/admin/comments?${url.toString()}`;
+  };
+
+  const handleSort = (key: string) => {
+    const newDirection = sortKey === key && sortDirection === 'asc' ? 'desc' : 'asc';
+    router.push(buildUrl({ page: 1, sortKey: key, sortDirection: newDirection, search }));
+  };
+
+  const handleSearch = (query: string) => router.push(buildUrl({ page: 1, search: query, sortKey, sortDirection }));
+  const handlePageChange = (newPage: number) => router.push(buildUrl({ page: newPage, sortKey, sortDirection, search }));
+
+  const handleDelete = async (item: Comment) => {
+    if (deleteConfirm === item.id) {
+      try { await fetch(`/api/admin/comments/${item.id}`, { method: 'DELETE' }); fetchData(); } catch (e) { console.error(e); }
+      setDeleteConfirm(null);
+    } else {
+      setDeleteConfirm(item.id);
+    }
+  };
+
+  const totalPages = Math.ceil(totalCount / pageSize);
+
+  const columns = [
     { key: 'id', label: 'ID', sortable: true, width: 'w-20' },
-    { key: 'content', label: 'Content', render: (c) => <span className="line-clamp-2 max-w-md">{c.content}</span> },
-    { key: 'user', label: 'Author', render: (c) => c.user?.username || '-' },
-    { key: 'postId', label: 'Post ID', sortable: true },
-    { key: 'likes', label: 'Likes', render: (c) => c._count.commentLikes },
-    { key: 'replies', label: 'Replies', render: (c) => c._count.replies },
-    { key: 'createdAt', label: 'Created', sortable: true, render: (c) => new Date(c.createdAt).toLocaleDateString() },
+    { key: 'content', label: 'Содержимое' },
+    { key: 'user', label: 'Автор' },
+    { key: 'postId', label: 'ID поста', sortable: true },
+    { key: 'likes', label: 'Лайки' },
+    { key: 'replies', label: 'Ответы' },
+    { key: 'createdAt', label: 'Создан', sortable: true },
   ];
+
+  if (loading) return <div className="flex items-center justify-center py-12"><div className="text-gray-500 dark:text-gray-400">Загрузка...</div></div>;
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">Comments</h1>
-      <AdminTable data={comments} columns={columns} totalCount={totalCount} page={page} pageSize={pageSize} basePath="/admin/comments" searchPlaceholder="Search comments..." sortKey={sortKey} sortDirection={sortDirection} />
+      <h1 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">Комментарии</h1>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between gap-4">
+          <AdminSearchInput placeholder="Поиск комментариев..." onSearch={handleSearch} />
+          <Link href="/admin/comments/new"><Button size="small">Создать комментарий</Button></Link>
+        </div>
+
+        <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+          <table className="w-full">
+            <thead className="bg-gray-50 dark:bg-gray-800">
+              <tr>
+                {columns.map((col) => (
+                  <th key={col.key} className={cn('px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white', col.sortable && 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700', col.width)} onClick={() => col.sortable && handleSort(col.key)}>
+                    <div className="flex items-center gap-2">{col.label}{col.sortable && sortKey === col.key && <span>{sortDirection === 'asc' ? '↑' : '↓'}</span>}</div>
+                  </th>
+                ))}
+                <th className="w-32 px-4 py-3 text-right text-sm font-semibold text-gray-900 dark:text-white">Действия</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+              {data.length === 0 ? (
+                <tr><td colSpan={columns.length + 1} className="px-4 py-8 text-center text-gray-500 dark:text-gray-400">Данные не найдены</td></tr>
+              ) : (
+                data.map((item) => (
+                  <tr key={item.id} className="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">{item.id}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300"><span className="line-clamp-2 max-w-md">{item.content}</span></td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">{item.user?.username || '-'}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">{item.postId}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">{item._count.commentLikes}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">{item._count.replies}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">{new Date(item.createdAt).toLocaleDateString('ru-RU')}</td>
+                    <td className="px-4 py-3 text-right">
+                      <div className="flex justify-end gap-2">
+                        <Link href={`/admin/comments/${item.id}`}><Button size="small" mode="ghost">Изменить</Button></Link>
+                        <Button size="small" mode="ghost" className={deleteConfirm === item.id ? 'text-red-600' : ''} onPress={() => handleDelete(item)}>{deleteConfirm === item.id ? 'Подтвердить?' : 'Удалить'}</Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+        <AdminPagination page={page} totalPages={totalPages} totalCount={totalCount} pageSize={pageSize} onPageChange={handlePageChange} />
+      </div>
     </div>
   );
 }

@@ -12,7 +12,7 @@ async function main() {
     create: {
       email: 'admin@example.com',
       password,
-      name: 'Super Admin',
+      name: 'Главный Администратор',
       role: 'SUPER_ADMIN',
       isActive: true,
     },

@@ -1,79 +1,214 @@
-import prisma from '@/lib/prisma/prisma';
-import { AdminTable, Column } from '@/components/admin/AdminTable';
+'use client';
 
-interface PageProps {
-  searchParams: { page?: string; search?: string; sortKey?: string; sortDirection?: string };
+import { useEffect, useState, useCallback } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import Button from '@/components/ui/Button';
+import { AdminPagination } from '@/components/admin/AdminPagination';
+import { AdminSearchInput } from '@/components/admin/AdminSearchInput';
+import { cn } from '@/lib/cn';
+
+interface Post {
+  id: number;
+  content: string | null;
+  createdAt: string;
+  user: { id: string; username: string | null };
+  _count: { postLikes: number; comments: number };
 }
 
-export default async function PostsPage({ searchParams }: PageProps) {
-  const page = parseInt(searchParams.page || '1');
+interface ApiResponse {
+  data: Post[];
+  pagination: {
+    page: number;
+    pageSize: number;
+    totalCount: number;
+    totalPages: number;
+  };
+}
+
+export default function PostsPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const [data, setData] = useState<Post[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
+
+  const page = parseInt(searchParams.get('page') || '1');
   const pageSize = 20;
-  const search = searchParams.search || '';
-  const sortKey = searchParams.sortKey || 'id';
-  const sortDirection = (searchParams.sortDirection || 'desc') as 'asc' | 'desc';
+  const search = searchParams.get('search') || '';
+  const sortKey = searchParams.get('sortKey') || 'id';
+  const sortDirection = searchParams.get('sortDirection') || 'desc';
 
-  const where = search
-    ? {
-        OR: [
-          { content: { contains: search, mode: 'insensitive' as const } },
-          { user: { username: { contains: search, mode: 'insensitive' as const } } },
-        ],
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams({
+        page: String(page),
+        pageSize: String(pageSize),
+        search,
+        sortKey,
+        sortDirection,
+      });
+      const res = await fetch(`/api/admin/posts?${params}`);
+      const json: ApiResponse = await res.json();
+      setData(json.data);
+      setTotalCount(json.pagination.totalCount);
+    } catch (e) {
+      console.error('Failed to fetch posts', e);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, pageSize, search, sortKey, sortDirection]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const buildUrl = (params: Record<string, string | number>) => {
+    const url = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value) url.set(key, String(value));
+    });
+    return `/admin/posts?${url.toString()}`;
+  };
+
+  const handleSort = (key: string) => {
+    const newDirection = sortKey === key && sortDirection === 'asc' ? 'desc' : 'asc';
+    router.push(buildUrl({ page: 1, sortKey: key, sortDirection: newDirection, search }));
+  };
+
+  const handleSearch = (query: string) => {
+    router.push(buildUrl({ page: 1, search: query, sortKey, sortDirection }));
+  };
+
+  const handlePageChange = (newPage: number) => {
+    router.push(buildUrl({ page: newPage, sortKey, sortDirection, search }));
+  };
+
+  const handleDelete = async (post: Post) => {
+    if (deleteConfirm === post.id) {
+      try {
+        await fetch(`/api/admin/posts/${post.id}`, { method: 'DELETE' });
+        fetchData();
+      } catch (e) {
+        console.error('Failed to delete post', e);
       }
-    : {};
+      setDeleteConfirm(null);
+    } else {
+      setDeleteConfirm(post.id);
+    }
+  };
 
-  const [posts, totalCount] = await Promise.all([
-    prisma.post.findMany({
-      where,
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-      orderBy: { [sortKey]: sortDirection },
-      include: {
-        user: { select: { id: true, username: true } },
-        _count: { select: { postLikes: true, comments: true } },
-      },
-    }),
-    prisma.post.count({ where }),
-  ]);
+  const totalPages = Math.ceil(totalCount / pageSize);
 
-  const columns: Column<typeof posts[0]>[] = [
+  const columns = [
     { key: 'id', label: 'ID', sortable: true, width: 'w-20' },
-    {
-      key: 'content',
-      label: 'Content',
-      render: (post) => (
-        <span className="line-clamp-2 max-w-md">{post.content || '-'}</span>
-      ),
-    },
-    {
-      key: 'user',
-      label: 'Author',
-      render: (post) => post.user?.username || '-',
-    },
-    { key: 'likes', label: 'Likes', render: (post) => post._count.postLikes },
-    { key: 'comments', label: 'Comments', render: (post) => post._count.comments },
-    {
-      key: 'createdAt',
-      label: 'Created',
-      sortable: true,
-      render: (post) => new Date(post.createdAt).toLocaleDateString(),
-    },
+    { key: 'content', label: 'Содержимое' },
+    { key: 'user', label: 'Автор' },
+    { key: 'likes', label: 'Лайки' },
+    { key: 'comments', label: 'Комментарии' },
+    { key: 'createdAt', label: 'Создан', sortable: true },
   ];
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-gray-500 dark:text-gray-400">Загрузка...</div>
+      </div>
+    );
+  }
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">Posts</h1>
-      <AdminTable
-        data={posts}
-        columns={columns}
-        totalCount={totalCount}
-        page={page}
-        pageSize={pageSize}
-        basePath="/admin/posts"
-        searchPlaceholder="Search posts..."
-        sortKey={sortKey}
-        sortDirection={sortDirection}
-        createLabel="Create Post"
-      />
+      <h1 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">Посты</h1>
+
+      <div className="space-y-4">
+        <div className="flex items-center justify-between gap-4">
+          <AdminSearchInput placeholder="Поиск постов..." onSearch={handleSearch} />
+          <Link href="/admin/posts/new">
+            <Button size="small">Создать пост</Button>
+          </Link>
+        </div>
+
+        <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+          <table className="w-full">
+            <thead className="bg-gray-50 dark:bg-gray-800">
+              <tr>
+                {columns.map((col) => (
+                  <th
+                    key={col.key}
+                    className={cn(
+                      'px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white',
+                      col.sortable && 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700',
+                      col.width
+                    )}
+                    onClick={() => col.sortable && handleSort(col.key)}
+                  >
+                    <div className="flex items-center gap-2">
+                      {col.label}
+                      {col.sortable && sortKey === col.key && (
+                        <span>{sortDirection === 'asc' ? '↑' : '↓'}</span>
+                      )}
+                    </div>
+                  </th>
+                ))}
+                <th className="w-32 px-4 py-3 text-right text-sm font-semibold text-gray-900 dark:text-white">
+                  Действия
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+              {data.length === 0 ? (
+                <tr>
+                  <td colSpan={columns.length + 1} className="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                    Данные не найдены
+                  </td>
+                </tr>
+              ) : (
+                data.map((post) => (
+                  <tr key={post.id} className="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">{post.id}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">
+                      <span className="line-clamp-2 max-w-md">{post.content || '-'}</span>
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">{post.user?.username || '-'}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">{post._count.postLikes}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">{post._count.comments}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">
+                      {new Date(post.createdAt).toLocaleDateString('ru-RU')}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <div className="flex justify-end gap-2">
+                        <Link href={`/admin/posts/${post.id}`}>
+                          <Button size="small" mode="ghost">Изменить</Button>
+                        </Link>
+                        <Button
+                          size="small"
+                          mode="ghost"
+                          className={deleteConfirm === post.id ? 'text-red-600' : ''}
+                          onPress={() => handleDelete(post)}
+                        >
+                          {deleteConfirm === post.id ? 'Подтвердить?' : 'Удалить'}
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <AdminPagination
+          page={page}
+          totalPages={totalPages}
+          totalCount={totalCount}
+          pageSize={pageSize}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </div>
   );
 }
