@@ -16,7 +16,8 @@
     "seed:docker": "npx prisma migrate deploy && node ./scripts/createMockUsers.mjs",
     "list-users": "node ./scripts/listUsers.mjs",
     "prepm2": "npm run build",
-    "pm2": "pm2 start next --name 'dongu-network' -- start -p 3002"
+    "pm2": "pm2 start next --name 'dongu-network' -- start -p 3002",
+    "pwa:icons": "node scripts/generatePwaIcons.mjs"
   },
   "dependencies": {
     "@auth/core": "^0.18.0",
@@ -27,6 +28,7 @@
     "@dnd-kit/modifiers": "^6.0.1",
     "@dnd-kit/sortable": "^7.0.2",
     "@dnd-kit/utilities": "^3.2.2",
+    "@ducanh2912/next-pwa": "^10.2.9",
     "@hookform/resolvers": "^3.3.1",
     "@internationalized/date": "^3.4.0",
     "@paralleldrive/cuid2": "^2.2.2",
@@ -93,6 +95,7 @@
     "prettier": "3.0.0",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "prisma": "^5.0.0",
+    "sharp": "^0.34.5",
     "tailwindcss": "^3.4.4"
   }
 }

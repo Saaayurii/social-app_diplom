@@ -8,5 +8,9 @@ import 'server-only';
  */
 export function fileNameToUrl(fileName: string | null) {
   if (!fileName) return null;
+  // If it's already a full URL (external), return as-is
+  if (fileName.startsWith('http://') || fileName.startsWith('https://')) {
+    return fileName;
+  }
   return `/uploads/${fileName}`;
 }

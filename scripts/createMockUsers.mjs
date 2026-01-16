@@ -5,9 +5,6 @@ import { createId } from '@paralleldrive/cuid2';
 
 const prisma = new PrismaClient();
 
-let maleAvatars = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-let femaleAvatars = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
 // Русские посты
 const russianPosts = [
   'Прекрасный день для новых начинаний!',
@@ -87,20 +84,6 @@ function getRandomMessage() {
   return russianMessages[Math.floor(Math.random() * russianMessages.length)];
 }
 
-function getRandomItemAndRemove(array) {
-  // Generate a random index
-  const randomIndex = Math.floor(Math.random() * array.length);
-
-  // Get the item at the random index
-  const item = array[randomIndex];
-
-  // Remove the item from the array
-  array.splice(randomIndex, 1);
-
-  // Return the removed item
-  return item;
-}
-
 function generateRandomBoolean(probability) {
   // Generate a random number between 0 and 1
   const random = Math.random();
@@ -136,16 +119,8 @@ function createRandomUser() {
     'MARRIED',
   ]);
 
-  // Get a random profile picture from maleAvatars or femaleAvatars
-  // depending on gender, then, remove the returned profile picture
-  const randomProfilePhoto = `${getRandomItemAndRemove(
-    gender === 'male' ? maleAvatars : femaleAvatars,
-  )}.png`;
-  // Reset avatars array when all values are consumed
-  if (maleAvatars.length === 0) maleAvatars = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  if (femaleAvatars.length === 0)
-    femaleAvatars = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  const profilePhotoPath = `seed-${gender}-avatars/${randomProfilePhoto}`;
+  // Generate avatar URL using UI Avatars API based on user's name
+  const profilePhotoPath = `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=random&size=200&bold=true`;
 
   // Создание постов
   const fakePosts = Array.from({ length: 3 }).map((item, i) => ({
